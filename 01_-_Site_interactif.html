@@ -321,6 +321,23 @@ const JULIEN_FLIP_VISUALS = {
        alt: "Troupeau de vaches allongées et épuisées dans l'étable au crépuscule, éleveur silhouette à la fenêtre au fond" }
 };
 
+/* --------- Sophie : 4 illustrations manga (cartes à retourner) --------- */
+const SOPHIE_IMG_ACT1 = "images/sophie-acte1-clim.jpg";
+const SOPHIE_IMG_ACT2 = "images/sophie-acte2-courses.jpg";
+const SOPHIE_IMG_ACT3 = "images/sophie-acte3-teletravail.jpg";
+const SOPHIE_IMG_ACT4 = "images/sophie-acte4-compteur.jpg";
+
+const SOPHIE_FLIP_VISUALS = {
+  0: { img: SOPHIE_IMG_ACT1, caption: "7h00 — 22°C à l'intérieur, enfer orange dehors",
+       alt: "Femme dans un salon frais sous la clim bleue, contraste saisissant avec la ville orange brûlante visible par la fenêtre" },
+  1: { img: SOPHIE_IMG_ACT2, caption: "11h00 — sortir en pleine canicule, le chien ne s'y risque pas",
+       alt: "Femme sortant d'une voiture climatisée face à un trottoir vide, un chien allongé à plat dans le peu d'ombre disponible" },
+  2: { img: SOPHIE_IMG_ACT3, caption: "14h00 — télétravail sous tension, la multiprise grille",
+       alt: "Femme devant son laptop en sueur, ventilateur à fond, multiprise qui crépite d'étincelles, plante fanée sur le bureau" },
+  3: { img: SOPHIE_IMG_ACT4, caption: "23h00 — le compteur s'emballe, seule maison éclairée du quartier",
+       alt: "Gros plan sur un compteur électrique digital aux chiffres qui défilent, maison encore allumée seule dans la nuit" }
+};
+
 /* =========================================================
    SOURCES — bibliographie complète
    ========================================================= */
@@ -513,6 +530,7 @@ const CHARACTERS = {
     colors: { bg:"#12202a", panel:"#1f3540", accent:"#4A9CC9", accent2:"#8B96A0", cbg:"#1f3540", cink:"#EAF2F5" },
     acts: [
       { title:"Réveil — 22°C grâce à la clim", time:"7h00",
+        question:"La clim tourne depuis la veille — faut-il l'ajuster face à l'alerte réseau ?",
         narration:"Chez Sophie, il fait 22°C : la climatisation tourne depuis la veille. Une alerte RTE invite à limiter sa consommation électrique aux heures de pointe.",
         fact:"Les centrales nucléaires en bord de rivière ou de mer sont soumises à des seuils de température de rejet, imposés depuis les canicules de 2003 et 2006 : au-delà, la puissance des réacteurs doit être réduite. Certains sites côtiers ont même dû, par le passé, réduire leur activité après une invasion de méduses obstruant les prises d'eau de refroidissement. Le 22 juin 2026, 6,38 GW de puissance nucléaire étaient indisponibles à cause de la chaleur — un record absolu ; EDF anticipait 8,4 GW la nuit suivante. Golfech, Bugey 2 et 3, Nogent-sur-Seine étaient à l'arrêt, Saint-Alban maintenu au minimum technique.",
         sources:[S.franceinfoNuc, S.wikiEauNuc, S.linkedinLaconde],
@@ -521,6 +539,7 @@ const CHARACTERS = {
           { label:"Laisser tourner la clim à fond, elle privilégie son confort", risk:10, consequence:"Un choix légitime, qui pèse cependant sur la pointe de consommation. Au-delà du réseau électrique, l'air chaud rejeté par les groupes de climatisation contribue aussi, à petite échelle, à réchauffer l'air extérieur — un des mécanismes de l'îlot de chaleur urbain." }
         ]},
       { title:"Sortir faire quelques courses", time:"11h00",
+        question:"Vous devez sortir — comment vous déplacez-vous en pleine canicule ?",
         narration:"Sophie doit sortir en fin de matinée pour un petit trajet. Quel que soit le choix, mieux vaut privilégier des vêtements clairs et garder une gourde d'eau à disposition.",
         fact:"Perifem, l'association qui fédère les acteurs techniques de la distribution, recommande aux magasins de maintenir une température intérieure sous les 26°C pour la chaîne du froid, et travaille sur des espaces rafraîchis accessibles à la clientèle en période de vigilance rouge.",
         sources:[S.lsaPerifem],
@@ -530,6 +549,7 @@ const CHARACTERS = {
           { label:"Prendre le bus ou le tram climatisé", risk:0, consequence:"Une option raisonnable, à condition que le réseau de transport en commun tienne lui aussi la cadence pendant l'épisode — ce qui n'est pas toujours garanti sur les lignes les plus anciennes." }
         ]},
       { title:"Télétravail — risque de coupure", time:"14h00",
+        question:"Une coupure est possible cet après-midi — comment vous y préparez-vous ?",
         narration:"Bureau climatisé, télétravail. Les prévisions RTE de l'après-midi n'excluent pas une coupure tournante.",
         fact:"Un carreau de fenêtre en plein soleil, associé au sol qu'il chauffe par rayonnement, peut transmettre de l'ordre de 200 W par mètre carré à l'intérieur d'une pièce non protégée — jusqu'à l'équivalent d'un petit radiateur électrique sur une grande baie vitrée exposée plusieurs heures.",
         sources:[S.volets],
@@ -538,6 +558,7 @@ const CHARACTERS = {
           { label:"Ne rien anticiper, « ça n'arrivera pas ici »", risk:15, consequence:"En cas de coupure, la maison aux grandes baies vitrées accumule vite la chaleur sans aucune clim." }
         ]},
       { title:"Nuit — consommation record", time:"23h00",
+        question:"La clim tourne encore à 23h — la laissez-vous au maximum toute la nuit ?",
         narration:"La climatisation tourne encore. Le compteur électrique affiche une consommation record pour un mois de juin.",
         fact:"De nombreux bâtiments, y compris tertiaires, règlent désormais leur climatisation à 26°C plutôt qu'à 22°C, une norme généralisée depuis la crise énergétique, qui limite un peu le pic de consommation sans jamais l'annuler. À La Défense, l'usine de froid Idex — 14 km de réseau, environ 200 000 travailleurs desservis chaque jour — ne parvenait plus à reconstituer ses stocks de glace la nuit.",
         sources:[S.capitalDefense, S.lacroixDefense],
@@ -899,7 +920,15 @@ function julienFrontFaceHTML(actIndex){
     <span class="flip-hint">↻ Retourner la carte</span>
   `;
 }
-// buildFlipBackFace : générique, utilisé pour Karim, Amina ET Julien
+function sophieFrontFaceHTML(actIndex){
+  const v = SOPHIE_FLIP_VISUALS[actIndex];
+  return `
+    <img class="hero-photo" src="${v.img}" alt="${v.alt}">
+    <div class="hero-caption">${v.caption}</div>
+    <span class="flip-hint">↻ Retourner la carte</span>
+  `;
+}
+// buildFlipBackFace : générique, utilisé pour Karim, Amina, Julien ET Sophie
 // (act.question est requis dans les données du personnage)
 function buildFlipBackFace(face, act){
   face.innerHTML = `<div class="face-content">
@@ -971,6 +1000,20 @@ function illustrationSlot(act){
         </div>
       </div>`;
   }
+  // ── Sophie : carte à retourner (même mécanique que Karim, Amina, Julien) ──
+  if(state.charId==='sophie' && SOPHIE_FLIP_VISUALS.hasOwnProperty(state.actIndex)){
+    if(state.awaitingContinue){
+      return `<div class="flip-card static"><div class="flip-card-face flip-front-face">
+        <div class="face-content">${sophieFrontFaceHTML(state.actIndex)}</div>
+      </div></div>`;
+    }
+    return `
+      <div class="flip-card" id="flipcard" data-side="front" role="button" tabindex="0" aria-label="Retourner la carte pour voir la question">
+        <div class="flip-card-face flip-front-face" id="flipcardface">
+          <div class="face-content">${sophieFrontFaceHTML(state.actIndex)}</div>
+        </div>
+      </div>`;
+  }
   // ── Défaut : illustration SVG ──
   const c = CHARACTERS[state.charId];
   return `<div class="illustration" style="color:${c.colors.accent}">${ILLUS[state.charId][state.actIndex]}</div>`;
@@ -999,6 +1042,8 @@ function toggleFlip(){
         ? aminaFrontFaceHTML(state.actIndex)
         : state.charId==='julien'
         ? julienFrontFaceHTML(state.actIndex)
+        : state.charId==='sophie'
+        ? sophieFrontFaceHTML(state.actIndex)
         : karimFrontFaceHTML(state.actIndex);
       face.innerHTML = `<div class="face-content">${frontHTML}</div>`;
       card.dataset.side = 'front';
@@ -1032,11 +1077,12 @@ function renderGame(){
   const zone = ZONES[zoneIdx];
   const fillPct = Math.max(0, Math.min(100, (state.risk / 80) * 100));
 
-  // Amina, Karim et Julien partagent le même système de carte à retourner
+  // Amina, Karim, Julien et Sophie partagent le même système de carte à retourner
   const isFlipAct =
     (state.charId==='karim' && KARIM_FLIP_VISUALS.hasOwnProperty(state.actIndex)) ||
     (state.charId==='amina' && AMINA_FLIP_VISUALS.hasOwnProperty(state.actIndex)) ||
-    (state.charId==='julien' && JULIEN_FLIP_VISUALS.hasOwnProperty(state.actIndex));
+    (state.charId==='julien' && JULIEN_FLIP_VISUALS.hasOwnProperty(state.actIndex)) ||
+    (state.charId==='sophie' && SOPHIE_FLIP_VISUALS.hasOwnProperty(state.actIndex));
 
   let body;
   if(!state.awaitingContinue){
