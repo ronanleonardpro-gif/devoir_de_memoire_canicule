@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Devoir de mémoire — Canicule, juin 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Archivo:ital,wght@0,400;0,500;0,700;0,800;1,500&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#161310; --paper:#EDE6D6;
+    --bg-jaune:#E8C468; --bg-orange:#E8622B; --bg-rouge:#8B1E1E;
+    --bg:#1b1815; --panel:#2a2620; --accent:#c9622b; --accent2:#8b96a0; --text:#EDE6D6;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background: var(--bg); color: var(--text); font-family:'Archivo', sans-serif;
+    min-height:100vh; display:flex; align-items:center; justify-content:center;
+    padding:28px 14px; transition: background .6s ease;
+  }
+  .stage{ width:100%; max-width:880px; }
+  h1,h2,h3,.headline{ font-family:'Bangers', cursive; letter-spacing:.5px; }
+  .eyebrow{ font-family:'JetBrains Mono', monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color: var(--accent); opacity:.9; }
+  .temp-tag{ font-family:'JetBrains Mono', monospace; font-weight:600; }
+
+  .panel{ position:relative; background: var(--panel); border-radius:2px; padding:26px 26px 22px; margin-bottom:18px; }
+  .panel::before, .panel::after{ content:""; position:absolute; inset:-6px; border:3px solid var(--ink); pointer-events:none; }
+  .panel::before{ transform: rotate(-.35deg); }
+  .panel::after{ transform: rotate(.3deg); opacity:.55; }
+
+  .cover{ text-align:center; padding:46px 26px 34px; }
+  .cover h1{ font-size:52px; line-height:1.05; margin:0 0 6px; color:var(--paper); text-shadow:3px 3px 0 var(--ink); }
+  .cover .sub{ font-size:16px; opacity:.85; max-width:540px; margin:10px auto 26px; line-height:1.5; }
+  .cover-actions{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:10px; }
+
+  .btn{ font-family:'Bangers', cursive; font-size:19px; letter-spacing:.5px; background: var(--accent); color:var(--ink);
+    border:3px solid var(--ink); border-radius:4px; padding:11px 24px; cursor:pointer;
+    box-shadow:4px 4px 0 var(--ink); transition: transform .12s ease, box-shadow .12s ease; }
+  .btn:hover{ transform: translate(-2px,-2px); box-shadow:6px 6px 0 var(--ink); }
+  .btn:active{ transform: translate(1px,1px); box-shadow:2px 2px 0 var(--ink); }
+  .btn.ghost{ background:transparent; color:var(--text); }
+  .btn.small{ font-size:14px; padding:7px 14px; box-shadow:3px 3px 0 var(--ink); }
+  .link-plain{ color: var(--accent); text-decoration:underline; cursor:pointer; font-size:13px; font-family:'JetBrains Mono',monospace; }
+
+  .grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:16px; }
+  .card{ cursor:pointer; border:3px solid var(--ink); border-radius:4px; background: var(--cbg); padding:16px; text-align:left;
+    display:flex; flex-direction:column; gap:8px; transition: transform .15s ease; }
+  .card:hover{ transform: translateY(-4px); }
+  .card svg{ width:46px; height:46px; }
+  .card h3{ margin:0; font-size:24px; color:var(--cink); }
+  .card .tag{ font-size:12.5px; opacity:.85; color:var(--cink); line-height:1.35; }
+  .card .arrow{ align-self:flex-end; font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--cink); }
+
+  .topbar{ display:flex; align-items:center; justify-content:space-between; gap:14px; margin-bottom:14px; flex-wrap:wrap; }
+  .who{ display:flex; align-items:center; gap:10px; }
+  .who svg{ width:34px; height:34px; }
+  .who .name{ font-family:'Bangers',cursive; font-size:20px; }
+  .who .tag{ font-size:11.5px; opacity:.75; }
+
+  .gauge{ display:flex; align-items:center; gap:8px; }
+  .gauge-track{ position:relative; width:150px; height:14px; border:2px solid var(--ink); background:#000000aa; border-radius:8px; overflow:hidden; }
+  .gauge-fill{ position:absolute; left:0; top:0; bottom:0; width:0%; background: var(--zone-color, var(--bg-jaune)); transition: width .5s ease, background .5s ease; }
+  .gauge-ticks{ position:absolute; inset:0; display:flex; }
+  .gauge-ticks span{ flex:1; border-right:1px solid rgba(0,0,0,.35); }
+  .gauge-label{ font-family:'JetBrains Mono',monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; }
+
+  .illustration{ display:block; width:100%; max-width:230px; height:auto; margin:0 auto 16px; }
+  .illustration svg{ width:100%; height:auto; display:block; }
+
+  .act-eyebrow{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:6px;}
+  .act-title{ font-size:29px; margin:0 0 10px; }
+  .narration{ font-size:16.5px; line-height:1.55; margin-bottom:6px; }
+  .narration::first-letter{ font-family:'Bangers',cursive; font-size:36px; float:left; line-height:.8; margin-right:6px; color:var(--accent); }
+  .tip{ font-size:13.5px; opacity:.8; font-style:italic; margin-bottom:16px; }
+
+  .choices{ display:flex; flex-direction:column; gap:10px; margin-top:14px; }
+  .choice-btn{ text-align:left; background: rgba(0,0,0,.18); border:2px solid var(--ink); color:var(--text); padding:13px 16px;
+    border-radius:4px; cursor:pointer; font-family:'Archivo', sans-serif; font-size:14.5px; font-weight:600;
+    display:flex; gap:10px; align-items:flex-start; transition: background .15s ease, transform .1s ease; }
+  .choice-btn:hover{ background: rgba(0,0,0,.32); transform: translateX(2px); }
+  .choice-btn .bullet{ font-family:'Bangers',cursive; color:var(--accent); font-size:18px; }
+
+  .consequence-box{ margin-top:16px; padding:14px 16px; border-left:4px solid var(--accent); background: rgba(0,0,0,.22); font-size:14.5px; line-height:1.5; font-style:italic; }
+  .fact-card{ margin-top:14px; padding:14px 16px; border:2px dashed var(--accent2); background: rgba(255,255,255,.04); font-size:13px; line-height:1.5; }
+  .tips-card{ margin:18px 0; padding:16px 18px; border:2px solid var(--accent); border-radius:6px; background: rgba(255,255,255,.03); }
+  .tips-list{ margin:8px 0 0; padding-left:20px; font-size:13.5px; line-height:1.55; }
+  .tips-list li{ margin-bottom:9px; }
+  .tips-list li:last-child{ margin-bottom:0; }
+  .tips-list a{ color: var(--accent); text-decoration:underline; }
+  .fact-card .flabel{ font-family:'JetBrains Mono',monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:.1em; color:var(--accent2); display:block; margin-bottom:5px; }
+  .fact-card .fsource{ display:block; margin-top:8px; font-family:'JetBrains Mono',monospace; font-size:10.5px; }
+  .fact-card .fsource a{ color:var(--accent); text-decoration:underline; margin-right:10px; }
+  .continue-row{ margin-top:18px; display:flex; justify-content:flex-end; gap:10px; flex-wrap:wrap; }
+
+  .zone-banner{ text-align:center; padding:22px 14px; margin-bottom:6px; border:3px solid var(--ink); background: var(--zone-color); color: var(--ink); }
+  .zone-banner h2{ font-size:32px; margin:0 0 4px; }
+  .epilogue-text{ font-size:15.5px; line-height:1.6; margin:16px 0; }
+  .threshold-note{ margin-top:18px; padding:14px 16px; border:2px dashed var(--accent2); font-size:13.5px; line-height:1.55; }
+  .end-actions{ display:flex; gap:10px; margin-top:18px; flex-wrap:wrap; }
+
+  .sources-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px; }
+  .sources-list li{ padding:11px 13px; border:1.5px solid var(--ink); background: rgba(0,0,0,.18); font-size:13.5px; line-height:1.45; }
+  .sources-list b{ display:block; margin-bottom:3px; font-family:'Bangers',cursive; font-size:15px; color:var(--accent); }
+  .sources-list a{ color:var(--accent); text-decoration:underline; word-break:break-all; }
+
+  .screen{ display:none; } .screen.active{ display:block; animation: fadeUp .35s ease; }
+  @keyframes fadeUp{ from{ opacity:0; transform: translateY(8px);} to{opacity:1; transform:translateY(0);} }
+  footer.credit{ text-align:center; font-family:'JetBrains Mono',monospace; font-size:10.5px; opacity:.5; margin-top:16px; }
+
+  /* ===== Carte à retourner (flip card) — Acte 1 Karim =====
+     IMPORTANT : aucune propriété 3D (perspective / backface-visibility / rotateY)
+     n'est utilisée ici. Ces propriétés, combinées à une ombre portée, peuvent casser
+     la détection de clic sur certains navigateurs même quand tout s'affiche
+     correctement. L'effet de "retournement" est simulé en 2D pur (zoom + fondu),
+     ce qui garantit que les boutons restent cliquables dans tous les cas. */
+  .flip-card{
+    width:min(100%, 420px); max-width:420px; margin:0 auto 18px; cursor:pointer; user-select:none;
+  }
+  .flip-card.static{ cursor:default; }
+  @media (max-width:560px){ .flip-card{ width:min(100%, 300px); } }
+  .flip-card-face{
+    position:relative; width:100%; padding-top:132%;
+    border:3px solid var(--ink); border-radius:6px; overflow:hidden;
+    box-shadow:6px 8px 0 rgba(0,0,0,.55);
+  }
+  .face-content{ position:absolute; inset:0; }
+  .flip-front-face{ background:var(--ink); }
+  .flip-back-face{ background:#0a0a0a; }
+  .flip-back-face .face-content{
+    display:flex; flex-direction:column; align-items:stretch; justify-content:center;
+    padding:22px 20px; text-align:left; color:#EDE6D6;
+  }
+  .flip-back-inner{ display:flex; flex-direction:column; gap:14px; max-height:100%; overflow-y:auto; }
+  .flip-eyebrow{ font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; opacity:.65; margin:0; text-align:center; }
+  .flip-question{
+    font-family:'Bangers',cursive; font-size:24px; line-height:1.22; margin:0; text-align:center; color:#fff;
+  }
+  .flip-choices{ display:flex; flex-direction:column; gap:9px; margin-top:4px; }
+  .flip-choice-btn{
+    text-align:left; background:rgba(255,255,255,.06); border:2px solid var(--bg-orange); color:#EDE6D6;
+    padding:11px 13px; border-radius:4px; cursor:pointer; font-family:'Archivo',sans-serif; font-size:13px; font-weight:600;
+    display:flex; gap:9px; align-items:flex-start; transition: background .15s ease, transform .1s ease, border-color .15s ease;
+    position:relative; z-index:2;
+  }
+  .flip-choice-btn:hover{ background:rgba(255,255,255,.14); border-color:#fff; transform:translateX(2px); }
+  .flip-choice-btn .bullet{ font-family:'Bangers',cursive; color:var(--bg-orange); font-size:16px; flex-shrink:0; }
+  /* Une seule photo héros, en grand format */
+  .hero-photo{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition: transform .6s cubic-bezier(.16,1,.3,1); }
+  .flip-card:hover .hero-photo{ transform: scale(1.12); }
+  .hero-caption{
+    position:absolute; left:0; right:0; bottom:0; z-index:5; padding:22px 16px 14px;
+    background:linear-gradient(to top, rgba(0,0,0,.75), rgba(0,0,0,0));
+    color:#fff; font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.08em; text-transform:uppercase;
+  }
+  .flip-hint{
+    position:absolute; bottom:8px; right:8px; font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:.04em;
+    background:rgba(0,0,0,.6); color:#fff; padding:4px 8px; border-radius:10px; z-index:7;
+    animation: pulseHint 2.2s ease-in-out infinite;
+  }
+  @keyframes pulseHint{ 0%,100%{ transform:scale(1); opacity:.85; } 50%{ transform:scale(1.08); opacity:1; } }
+  @media (prefers-reduced-motion: reduce){
+    .flip-hint{ animation:none; }
+    .flip-card-face{ transition-duration:.01ms !important; }
+  }
+
+  @media (max-width:560px){ .cover h1{ font-size:34px; } .topbar{ align-items:flex-start; } }
+</style>
+</head>
+<body>
+<div class="stage" id="stage"></div>
+
+<script>
+/* =========================================================
+   ICONES PERSONNAGES (sélection)
+   ========================================================= */
+const ICONS = {
+  amina: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3"><circle cx="32" cy="20" r="10"/><path d="M14 54c0-12 8-18 18-18s18 6 18 18" /><path d="M8 40c6-2 10 2 10 2M56 40c-6-2-10 2-10 2" stroke-dasharray="3 3"/></svg>`,
+  julien: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3"><path d="M32 54V26"/><path d="M32 30c-8-2-12-10-12-16 8 0 14 6 12 16Z"/><path d="M32 26c8-2 12-8 12-14-8 0-14 6-12 14Z"/><circle cx="48" cy="14" r="6"/></svg>`,
+  sophie: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3"><path d="M10 30 32 12l22 18"/><path d="M16 28v24h32V28"/><path d="M32 12v10M26 12l6 6 6-6M26 18l6-6 6 6" /></svg>`,
+  karim: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3"><path d="M8 40h48l-6-14a20 20 0 0 0-36 0Z"/><rect x="14" y="40" width="36" height="6"/><path d="M22 52h4M38 52h4"/></svg>`,
+  famille: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3"><circle cx="22" cy="16" r="7"/><path d="M10 40c0-9 6-13 12-13s12 4 12 13"/><circle cx="46" cy="26" r="5"/><path d="M38 42c0-6 4-9 8-9s8 3 8 9"/></svg>`,
+  marc: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3"><path d="M16 56C18 34 24 26 32 20c8 6 14 14 16 36"/><path d="M20 56h24"/><circle cx="46" cy="16" r="7"/><path d="M46 9v-4M53 16h4M46 23v4M41 11l-3-3M51 11l3-3" stroke-dasharray="2 2"/></svg>`,
+  camille: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3"><path d="M8 34h10l6-14 8 26 6-18 4 6h14"/><circle cx="32" cy="18" r="4" fill="currentColor" stroke="none"/></svg>`
+};
+
+/* =========================================================
+   ILLUSTRATIONS CARTOON PAR ACTE (SVG dessinées à la main)
+   ========================================================= */
+const SUNRAYS = `<g stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="130" y1="10" x2="130" y2="0"/><line x1="150" y1="18" x2="158" y2="10"/><line x1="110" y1="18" x2="102" y2="10"/></g>`;
+function sun(cx,cy,r){ return `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="currentColor" stroke-width="3"/>
+  <g stroke="currentColor" stroke-width="3" stroke-linecap="round">
+  <line x1="${cx}" y1="${cy-r-8}" x2="${cx}" y2="${cy-r-1}"/>
+  <line x1="${cx+r+8}" y1="${cy}" x2="${cx+r+1}" y2="${cy}"/>
+  <line x1="${cx}" y1="${cy+r+8}" x2="${cx}" y2="${cy+r+1}"/>
+  <line x1="${cx-r-8}" y1="${cy}" x2="${cx-r-1}" y2="${cy}"/>
+  <line x1="${cx+r*0.7+6}" y1="${cy-r*0.7-6}" x2="${cx+r*0.7}" y2="${cy-r*0.7}"/>
+  <line x1="${cx-r*0.7-6}" y1="${cy-r*0.7-6}" x2="${cx-r*0.7}" y2="${cy-r*0.7}"/>
+  </g>`; }
+function heatWaves(x,y,w){ return `<g stroke="currentColor" stroke-width="2.5" fill="none" opacity=".7">
+  <path d="M${x} ${y} q6 -8 12 0 t12 0 t12 0"/>
+  <path d="M${x} ${y+10} q6 -8 12 0 t12 0 t12 0"/></g>`; }
+
+const ILLUS = {
+  amina: [
+    // Acte 1 — chambre, sun through window, wavy heat
+    `<svg viewBox="0 0 200 130">${sun(160,26,14)}<rect x="20" y="70" width="70" height="8" fill="none" stroke="currentColor" stroke-width="3"/><rect x="24" y="40" width="30" height="30" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="60" cy="66" r="8" fill="none" stroke="currentColor" stroke-width="3"/>${heatWaves(30,90,50)}</svg>`,
+    // Acte 2 — visite aide à domicile
+    `<svg viewBox="0 0 200 130"><circle cx="70" cy="46" r="12" fill="none" stroke="currentColor" stroke-width="3"/><path d="M50 90c0-16 9-24 20-24s20 8 20 24" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="140" cy="42" r="12" fill="none" stroke="currentColor" stroke-width="3"/><path d="M120 90c0-16 9-24 20-24s20 8 20 24" fill="none" stroke="currentColor" stroke-width="3"/><rect x="98" y="72" width="10" height="16" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>`,
+    // Acte 3 — pièce fraîche, volets fermés
+    `<svg viewBox="0 0 200 130">${sun(170,20,12)}<rect x="40" y="30" width="60" height="70" fill="none" stroke="currentColor" stroke-width="3"/><line x1="40" y1="42" x2="100" y2="42" stroke="currentColor" stroke-width="3"/><line x1="40" y1="54" x2="100" y2="54" stroke="currentColor" stroke-width="3"/><line x1="40" y1="66" x2="100" y2="66" stroke="currentColor" stroke-width="3"/><line x1="40" y1="78" x2="100" y2="78" stroke="currentColor" stroke-width="3"/><line x1="40" y1="90" x2="100" y2="90" stroke="currentColor" stroke-width="3"/></svg>`,
+    // Acte 4 — nuit, téléphone/15
+    `<svg viewBox="0 0 200 130"><path d="M150 20a40 40 0 1 0 0 80 34 34 0 1 1 0-80Z" fill="none" stroke="currentColor" stroke-width="3"/><rect x="30" y="50" width="24" height="40" rx="4" fill="none" stroke="currentColor" stroke-width="3"/><text x="34" y="76" font-family="monospace" font-size="16" fill="currentColor">15</text></svg>`
+  ],
+  julien: [
+    `<svg viewBox="0 0 200 130">${sun(170,20,12)}<path d="M20 100 L60 60 L100 100Z" fill="none" stroke="currentColor" stroke-width="3"/><rect x="60" y="80" width="14" height="20" fill="none" stroke="currentColor" stroke-width="3"/><ellipse cx="150" cy="105" rx="20" ry="8" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>`,
+    `<svg viewBox="0 0 200 130"><rect x="20" y="40" width="14" height="30" fill="none" stroke="currentColor" stroke-width="3"/><line x1="27" y1="40" x2="27" y2="20" stroke="currentColor" stroke-width="3"/><line x1="60" y1="90" x2="180" y2="90" stroke="currentColor" stroke-width="2.5" stroke-dasharray="6 6"/><line x1="60" y1="102" x2="180" y2="102" stroke="currentColor" stroke-width="2.5" stroke-dasharray="6 6"/></svg>`,
+    `<svg viewBox="0 0 200 130"><path d="M40 100 L70 100 L60 60 L50 60Z" fill="none" stroke="currentColor" stroke-width="3"/><path d="M150 95 q5 -20 -5 -30 q10 5 8 -10 q10 15 -3 40Z" fill="currentColor" stroke="currentColor" stroke-width="2"/><line x1="20" y1="100" x2="180" y2="100" stroke="currentColor" stroke-width="3"/></svg>`,
+    `<svg viewBox="0 0 200 130"><path d="M150 20a30 30 0 1 0 0 60 26 26 0 1 1 0-60Z" fill="none" stroke="currentColor" stroke-width="3"/><ellipse cx="60" cy="90" rx="26" ry="14" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="40" cy="80" r="6" fill="none" stroke="currentColor" stroke-width="2.5"/><rect x="90" y="95" width="16" height="10" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>`
+  ],
+  sophie: [
+    `<svg viewBox="0 0 200 130"><path d="M40 60 L80 30 L120 60" fill="none" stroke="currentColor" stroke-width="3"/><rect x="48" y="58" width="64" height="42" fill="none" stroke="currentColor" stroke-width="3"/><rect x="120" y="75" width="26" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M170 30 L176 24 M170 36 L178 36 M170 42 L176 48" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="163" cy="36" r="10" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>`,
+    `<svg viewBox="0 0 200 130">${sun(30,22,10)}<rect x="80" y="55" width="60" height="34" rx="6" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="95" cy="94" r="8" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="125" cy="94" r="8" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M80 60 h60" stroke="currentColor" stroke-width="2"/></svg>`,
+    `<svg viewBox="0 0 200 130">${sun(160,18,10)}<rect x="20" y="20" width="100" height="60" fill="none" stroke="currentColor" stroke-width="3"/><line x1="70" y1="20" x2="70" y2="80" stroke="currentColor" stroke-width="2.5"/><path d="M20 80 L120 80 L120 100 L20 100 Z" fill="none" stroke="currentColor" stroke-width="2"/><g stroke="currentColor" stroke-width="2" opacity=".8"><line x1="30" y1="95" x2="34" y2="85"/><line x1="42" y1="95" x2="46" y2="85"/><line x1="54" y1="95" x2="58" y2="85"/></g></svg>`,
+    `<svg viewBox="0 0 200 130"><path d="M150 20a34 34 0 1 0 0 68 29 29 0 1 1 0-68Z" fill="none" stroke="currentColor" stroke-width="3"/><rect x="30" y="60" width="70" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="3"/><path d="M40 76 v8 M90 76 v8" stroke="currentColor" stroke-width="2.5"/><path d="M100 68 h14 M100 74 h10" stroke="currentColor" stroke-width="2"/></svg>`
+  ],
+  karim: [
+    `<svg viewBox="0 0 200 130">${sun(170,20,12)}<path d="M20 100 h160" stroke="currentColor" stroke-width="3"/><circle cx="60" cy="88" r="10" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="110" cy="88" r="10" fill="none" stroke="currentColor" stroke-width="3"/><path d="M60 88 L85 60 L110 88 M85 60 L85 45" stroke="currentColor" stroke-width="3" fill="none"/></svg>`,
+    `<svg viewBox="0 0 200 130"><path d="M30 90 L30 60 L170 60 L170 90" fill="none" stroke="currentColor" stroke-width="3"/><line x1="90" y1="30" x2="90" y2="60" stroke="currentColor" stroke-width="3"/><line x1="110" y1="30" x2="110" y2="60" stroke="currentColor" stroke-width="3"/><g stroke="currentColor" stroke-width="3"><line x1="75" y1="35" x2="125" y2="55"/><line x1="125" y1="35" x2="75" y2="55"/></g></svg>`,
+    `<svg viewBox="0 0 200 130">${sun(170,18,12)}<path d="M60 100 v-30 l20-10 20 10 v30" fill="none" stroke="currentColor" stroke-width="3"/><rect x="50" y="60" width="60" height="10" fill="none" stroke="currentColor" stroke-width="3"/><rect x="20" y="70" width="16" height="20" rx="3" fill="none" stroke="currentColor" stroke-width="2.5"/><g stroke="currentColor" stroke-width="2" opacity=".8"><path d="M40 74 q4 -6 8 0"/><path d="M40 80 q4 -6 8 0"/></g></svg>`,
+    `<svg viewBox="0 0 200 130"><path d="M40 60 L80 32 L120 60" fill="none" stroke="currentColor" stroke-width="3"/><rect x="48" y="58" width="64" height="42" fill="none" stroke="currentColor" stroke-width="3"/><line x1="52" y1="66" x2="108" y2="66" stroke="currentColor" stroke-width="2.5"/><line x1="52" y1="76" x2="108" y2="76" stroke="currentColor" stroke-width="2.5"/><circle cx="150" cy="80" r="14" fill="none" stroke="currentColor" stroke-width="3"/><line x1="150" y1="80" x2="150" y2="68" stroke="currentColor" stroke-width="2.5"/><line x1="150" y1="80" x2="160" y2="86" stroke="currentColor" stroke-width="2.5"/></svg>`
+  ],
+  famille: [
+    `<svg viewBox="0 0 200 130"><path d="M30 70 L80 35 L130 70" fill="none" stroke="currentColor" stroke-width="3"/><rect x="40" y="68" width="80" height="34" fill="none" stroke="currentColor" stroke-width="3"/><rect x="70" y="80" width="18" height="22" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="150" cy="30" r="10" fill="none" stroke="currentColor" stroke-width="2.5"/><line x1="150" y1="42" x2="150" y2="55" stroke="currentColor" stroke-width="2.5"/><line x1="150" y1="55" x2="140" y2="65" stroke="currentColor" stroke-width="2.5"/><line x1="150" y1="55" x2="160" y2="65" stroke="currentColor" stroke-width="2.5"/></svg>`,
+    `<svg viewBox="0 0 200 130">${sun(150,20,12)}<circle cx="60" cy="60" r="10" fill="none" stroke="currentColor" stroke-width="3"/><path d="M45 100c0-14 7-22 15-22s15 8 15 22" fill="none" stroke="currentColor" stroke-width="3"/><rect x="85" y="80" width="8" height="16" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>`,
+    `<svg viewBox="0 0 200 130"><rect x="30" y="60" width="50" height="34" rx="3" fill="none" stroke="currentColor" stroke-width="3"/><line x1="30" y1="70" x2="80" y2="70" stroke="currentColor" stroke-width="2.5"/><circle cx="130" cy="55" r="9" fill="none" stroke="currentColor" stroke-width="3"/><path d="M118 90c0-13 6-20 12-20s12 7 12 20" fill="none" stroke="currentColor" stroke-width="3"/></svg>`,
+    `<svg viewBox="0 0 200 130"><path d="M150 20a32 32 0 1 0 0 64 27 27 0 1 1 0-64Z" fill="none" stroke="currentColor" stroke-width="3"/><rect x="30" y="70" width="70" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="3"/><rect x="63" y="45" width="6" height="25" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="66" cy="42" r="4" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>`
+  ],
+  marc: [
+    // Acte 1 — Garonne trop chaude, salle de contrôle
+    `<svg viewBox="0 0 200 130">${sun(170,20,12)}<path d="M10 90 q20 -10 40 0 t40 0 t40 0 t40 0" fill="none" stroke="currentColor" stroke-width="3"/>${heatWaves(60,58,50)}<rect x="130" y="58" width="40" height="28" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>`,
+    // Acte 2 — tour de refroidissement
+    `<svg viewBox="0 0 200 130"><path d="M40 110c2-40 10-55 30-68 20 13 28 28 30 68" fill="none" stroke="currentColor" stroke-width="3"/><path d="M45 110h50" stroke="currentColor" stroke-width="3"/><path d="M70 20 q-4 -10 0 -18 M80 20 q4 -10 0 -18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" opacity=".7"/><rect x="140" y="70" width="30" height="20" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="150" cy="80" r="4" fill="currentColor" stroke="none"/><circle cx="162" cy="80" r="4" fill="currentColor" stroke="none"/></svg>`,
+    // Acte 3 — réseau électrique national (pylônes)
+    `<svg viewBox="0 0 200 130"><path d="M40 100V40M40 40l-14 14M40 40l14 14M40 60h-20M40 60h20" stroke="currentColor" stroke-width="2.5" fill="none"/><path d="M100 100V30M100 30l-16 16M100 30l16 16M100 55h-24M100 55h24M100 75h-20M100 75h20" stroke="currentColor" stroke-width="2.5" fill="none"/><path d="M160 100V45M160 45l-14 14M160 45l14 14M160 65h-20M160 65h20" stroke="currentColor" stroke-width="2.5" fill="none"/><line x1="40" y1="40" x2="100" y2="30" stroke="currentColor" stroke-width="2" stroke-dasharray="4 3"/><line x1="100" y1="30" x2="160" y2="45" stroke="currentColor" stroke-width="2" stroke-dasharray="4 3"/></svg>`,
+    // Acte 4 — retour en voiture, radio
+    `<svg viewBox="0 0 200 130"><path d="M30 95 L45 75 L95 75 L110 95Z" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="50" cy="98" r="8" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="95" cy="98" r="8" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M130 60 q6 -6 0 -12 M138 66 q12 -12 0 -24 M146 72 q18 -18 0 -36" stroke="currentColor" stroke-width="2" opacity=".7" fill="none"/></svg>`
+  ],
+  camille: [
+    // Acte 1 — hôpital, salle d'attente pleine
+    `<svg viewBox="0 0 200 130">${sun(170,20,12)}<rect x="40" y="40" width="70" height="60" fill="none" stroke="currentColor" stroke-width="3"/><path d="M68 55h14M75 48v14" stroke="currentColor" stroke-width="3"/><circle cx="130" cy="80" r="8" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="150" cy="80" r="8" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="170" cy="80" r="8" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>`,
+    // Acte 2 — panne informatique
+    `<svg viewBox="0 0 200 130"><rect x="60" y="30" width="80" height="55" rx="3" fill="none" stroke="currentColor" stroke-width="3"/><path d="M75 45 L105 65 M105 45 L75 65" stroke="currentColor" stroke-width="3"/><rect x="90" y="85" width="20" height="10" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M40 100h120" stroke="currentColor" stroke-width="2.5"/></svg>`,
+    // Acte 3 — thermomètre en maternité
+    `<svg viewBox="0 0 200 130"><rect x="70" y="20" width="60" height="60" fill="none" stroke="currentColor" stroke-width="3"/><rect x="94" y="30" width="12" height="35" rx="6" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="100" cy="72" r="10" fill="none" stroke="currentColor" stroke-width="2.5"/><line x1="100" y1="38" x2="100" y2="62" stroke="currentColor" stroke-width="3"/></svg>`,
+    // Acte 4 — nuit, point de bascule (courbe de pouls)
+    `<svg viewBox="0 0 200 130"><path d="M150 20a34 34 0 1 0 0 68 29 29 0 1 1 0-68Z" fill="none" stroke="currentColor" stroke-width="3"/><path d="M20 90h20l8-20 10 35 8-25 6 10h20" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>`
+  ]
+};
+
+
+const KARIM_IMG2 = "images/karim-acte1-reveil.jpg";
+
+const KARIM_IMG_ACT2 = "images/karim-acte2-pont-benouville.jpg";
+
+const KARIM_IMG_ACT3 = "images/karim-acte3-chantier-chaleur.jpg";
+
+const KARIM_IMG_ACT4 = "images/karim-acte4-volets.jpg";
+
+
+
+/* =========================================================
+   SOURCES — bibliographie complète
+   ========================================================= */
+const S = {
+  owid: { label:"Our World in Data — mortalité liée aux températures extrêmes", url:"https://ourworldindata.org/part-one-how-many-people-die-from-extreme-temperatures-and-how-could-this-change-in-the-future" },
+  vigilance: { label:"Météo-France — vigilance canicule", url:"https://vigilance.meteofrance.fr/fr/canicule" },
+  figaroVolailles: { label:"Le Figaro — volailles mortes de chaleur", url:"https://www.lefigaro.fr/actualite-france/la-canicule-tue-des-centaines-de-milliers-de-volailles-en-france-20260624" },
+  linkedinSinglande: { label:"LinkedIn — E. Singlande, restrictions d'eau en Bretagne", url:"https://www.linkedin.com/posts/elodie-singlande-mauvernay_brets-activity-7478320551695060992-vpuI/" },
+  telegramme: { label:"Le Télégramme — équarrissage débordé dans les Côtes-d'Armor", url:"https://www.letelegramme.fr/cotes-d-armor/loudeac-22600/face-a-lhecatombe-lequarrissage-deborde-dans-les-cotes-darmor-des-depouilles-seront-enfouies-au-plus-pres-des-elevages-7070391.php" },
+  franceinfoNuc: { label:"France Info — pourquoi les centrales nucléaires ralentissent", url:"https://www.franceinfo.fr/environnement/energie/nucleaire/vague-de-chaleur-on-vous-explique-pourquoi-les-centrales-nucleaires-sont-forcees-de-ralentir-pour-ne-pas-trop-rechauffer-les-cours-d-eau_7332477.html" },
+  wikiEauNuc: { label:"Wikipédia — eau de refroidissement de centrale thermique (méduses)", url:"https://fr.wikipedia.org/wiki/Eau_de_refroidissement_de_centrale_thermique" },
+  lsaPerifem: { label:"LSA — Perifem, éviter la surchauffe dans les magasins", url:"https://www.lsa-conso.fr/canicule-les-principaux-conseils-pour-eviter-la-surchauffe-dans-les-magasins,466325" },
+  volets: { label:"Volets et canicule — le bon mode d'emploi anti-chaleur", url:"https://www.etude-bet.fr/news/2026/gerer-volets-canicule-re2020.php" },
+  capitalDefense: { label:"Capital — climatisation de La Défense sous tension", url:"https://www.capital.fr/entreprises-marches/le-systeme-de-climatisation-de-la-defense-sous-tension-les-tours-en-verre-en-question-1527871" },
+  bfmBenouville: { label:"BFMTV — fermeture du pont de Bénouville", url:"https://www.bfmtv.com/normandie/canicule-le-pont-de-benouville-est-ferme-ports-de-normandie-craint-des-desordres-non-negligeables_AN-202606230838.html" },
+  codeTravail: { label:"Code du travail numérique — obligations de l'employeur en cas de canicule", url:"https://code.travail.gouv.fr/information/fortes-chaleurs-canicule-quelles-mesures-lemployeur-doit-il-mettre-en-place" },
+  epochCharpentier: { label:"Epoch Times — un charpentier de 19 ans meurt d'hyperthermie sur un chantier (Drôme)", url:"https://www.epochtimes.fr/canicule-un-charpentier-de-19-ans-meurt-dhyperthermie-sur-un-chantier-du-btp-dans-la-drome-3270980.html" },
+  banquePostale: { label:"La Banque Postale — plan 190 M€ d'adaptation climatique des écoles", url:"https://www.labanquepostale.com/content/dam/lbp/documents/communiques-de-presse/2026/CP-Banque-des-Territoires-ACTEE-LBP.pdf" },
+  parisCanicule: { label:"Ville de Paris — dispositif canicule (exemple de plan officiel)", url:"https://www.paris.fr/pages/la-canicule-5469" },
+  ouestFranceAngers: { label:"Ouest-France — à cette école, les parents ont posé des couvertures de survie aux fenêtres", url:"https://www.ouest-france.fr/meteo/canicule/canicule-dans-cette-ecole-les-parents-se-sont-relayes-pour-poser-des-couvertures-de-survie-aux-fenetres-8bf0147c-6e37-11f1-971c-5aa54f866c16" },
+  agriGouvVagueChaleur: { label:"Ministère de l'Agriculture — recommandations vague de chaleur pour les éleveurs", url:"https://agriculture.gouv.fr/plan-vague-de-chaleur-recommandations-pour-les-eleveurs" },
+  dormirAuFrais: { label:"Dormir au frais — initiative citoyenne d'accueil au frais (Boulogne-Billancourt)", url:"https://linktr.ee/dormiraufrais?fbclid=IwY2xjawS_TblleHRuA2FlbQIxMABicmlkETFFNGFXeGlJYkNmZEhqOUdjc3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHggkGGDVQMRjvsJfIS7BRs66nZQVrmDLba87GLCSwYjH4sDl7vcI1Cnfpzlf_aem_nKpuitLXMMI1XEzWoyLM8A" },
+  linkedinPoincare: { label:"LinkedIn — A. Poincaré, retour d'expérience canicule (mesures d'adaptation)", url:"https://www.linkedin.com/posts/antoinepoincare_ceci-est-une-mesure-dadaptation-hier-share-7478471144245800961" },
+  linkedinLaconde: { label:"LinkedIn — T. Laconde, 6,38 GW de puissance nucléaire indisponibles", url:"https://www.linkedin.com/posts/thibaultlaconde_techniquement-plutôt-une-décimation-actuellement-share-7476257104140480513" },
+  poincareRailsT6: { label:"LinkedIn — A. Poincaré, effet cumulatif de la chaleur (rails, catégorie T6)", date:"23 juin 2026" },
+  lemondeUrgences: { label:"Le Monde — hausse modérée des passages aux urgences, inquiétude montante", date:"24 juin 2026" },
+  lemondeBascule: { label:"Le Monde — hôpitaux français au point de bascule après sept jours de canicule", url:"https://www.lemonde.fr/en/france/article/2026/06/26/french-hospitals-at-tipping-point-after-seven-days-of-heatwave_6754898_7.html" },
+  dauphineMaternite: { label:"Le Dauphiné — 36°C mesurés en maternité, l'impossible défi de la canicule", date:"26 juin 2026" },
+  voixDuNordPanne: { label:"La Voix du Nord — panne des serveurs informatiques aux urgences", url:"https://www.lavoixdunord.fr/1715747/article/2026-06-25/panne-de-serveurs-informatiques-avant-de-vous-rendre-aux-urgences-de" },
+  france3Dole: { label:"France 3 — l'hôpital de Dole déclenche son plan blanc (panne informatique + canicule)", url:"https://france3-regions.franceinfo.fr/bourgogne-franche-comte/jura/l-hopital-de-dole-declenche-son-plan-blanc-en-raison-d-une-panne-informatique-et-de-la-canicule-un-personnel-en-plus-dans-chaque-service-3376174.html" },
+  infoclimat: { label:"Infoclimat.fr — relevés des stations météo françaises, juin 2026", url:"https://www.infoclimat.fr" },
+  lopinionGolfech: { label:"L'Opinion — Occitanie, centrale nucléaire à l'arrêt : EDF face au défi du climat", url:"https://lopinion.com/articles/actualite/34285_occitanie-centrale-nucleaire-a-larret-edf-face-au-defi-du-climat" },
+  telegrammePontivy: { label:"Le Télégramme — « On n'a jamais vu ça » : Brets et six autres usines à l'arrêt pour préserver l'eau à Pontivy", url:"https://www.letelegramme.fr/economie/on-na-jamais-vu-ca-brets-et-six-autres-usines-mises-a-larret-afin-de-preserver-leau-pour-la-population-et-lhopital-de-pontivy-7071956.php" },
+  lacroixDefense: { label:"La Croix — canicule à La Défense, un système de climatisation à l'épreuve du chaud", url:"https://www.la-croix.com/planete/canicule-a-la-defense-un-systeme-de-climatisation-a-l-epreuve-du-chaud-20260625" }
+};
+
+// Conseils clés affichés en fin de parcours (épilogue), un par personnage.
+// Chaque conseil peut contenir des liens <a> vers une source externe.
+const KEY_TIPS = {
+  amina: [
+    "La chaleur peut faire perdre en lucidité les personnes âgées : pensez à leur rappeler — ou à vous rappeler — de s'hydrater très régulièrement, même sans sensation de soif.",
+    "Pour ce public vulnérable, l'installation d'une climatisation est fortement recommandée.",
+    "Inscrivez-vous sur le registre/liste de la mairie si ce n'est pas encore fait : il permet d'être contacté et suivi en cas d'alerte canicule.",
+    "Confusion, nausées, absence de sueur malgré la chaleur : ce sont des signes d'alerte. N'attendez pas, appelez le 15."
+  ],
+  julien: [
+    "Anticipez les besoins en eau du cheptel et des cultures avant que la sécheresse ne s'aggrave.",
+    "Restez vigilant sur le risque de départ de feu dès la vigilance orange, surtout près des zones asséchées.",
+    "Surveillez les bâtiments d'élevage la nuit : la chaleur accumulée pendant la journée ne redescend pas toujours après le coucher du soleil.",
+    `Sur le long terme, réfléchissez à des essences, cultures et races plus adaptées à la chaleur : le ministère de l'Agriculture propose des recommandations par filière → <a href="${S.agriGouvVagueChaleur.url}" target="_blank" rel="noopener">${S.agriGouvVagueChaleur.label}</a>`
+  ],
+  sophie: [
+    "Réglez la climatisation à 26°C plutôt que 22°C : un geste désormais recommandé pour limiter la tension sur le réseau électrique.",
+    `Prenez soin des autres : appelez une voisine ou un voisin âgé — comme Amina, 78 ans — et proposez-lui de venir chez vous si vous avez une pièce disponible. Des initiatives citoyennes se sont créées dans cet esprit, comme <a href="${S.dormirAuFrais.url}" target="_blank" rel="noopener">${S.dormirAuFrais.label}</a>, qui met en lien particuliers climatisés et personnes vulnérables.`,
+    "Anticipez les pics de consommation pour éviter les coupures pendant les épisodes de vigilance rouge.",
+    "Fermez volets et rideaux côté soleil : une fenêtre en plein soleil transmet une chaleur importante par rayonnement."
+  ],
+  karim: [
+    "Faites valoir vos droits : horaires aménagés, eau fraîche et équipements de protection sont dus dès la vigilance orange (décret du 27 mai 2025).",
+    "Renseignez-vous sur les fermetures d'infrastructures avant de partir : la chaleur peut dilater les structures métalliques (ponts, voies).",
+    "Ne négligez jamais une pause hydratation, même sous pression de cadence.",
+    "Fermez les volets côté soleil avant de partir le matin, et brassez l'air avec un ventilateur au retour."
+  ],
+  famille: [
+    "Les enfants sont un public prioritaire face à la chaleur : soyez vigilant à la déshydratation et à la fatigue inhabituelle.",
+    "Renseignez-vous sur les aménagements scolaires possibles en vigilance rouge (fermeture ou horaires adaptés).",
+    "Surveillez le sommeil de l'enfant la nuit : une chambre encore chaude perturbe le repos et peut aggraver les symptômes."
+  ],
+  marc: [
+    "Tracez par écrit toute réserve technique avant d'exécuter une dérogation exceptionnelle : à l'oral, l'information se perd ; par écrit, elle reste mobilisable.",
+    "Une dérogation « exceptionnelle » qui se répète chaque été cesse d'être exceptionnelle : documentez la fréquence, pas seulement l'événement.",
+    "Les infrastructures énergétiques ne sont pas les seules concernées : routes, réseaux ferroviaires, datacenters et usines subissent le même dépassement de leurs limites de conception.",
+    "Le relais d'équipe est un moment critique : un résumé chiffré et complet vaut mieux qu'un compte-rendu rassurant mais imprécis."
+  ],
+  camille: [
+    "En procédure dégradée (panne informatique), basculez tout de suite sur le support papier prévu : la traçabilité prime sur la vitesse.",
+    "Une charge de travail qui dépasse la capacité d'un service doit être remontée formellement, pas seulement absorbée en silence par l'équipe en place.",
+    "Les pics de passages aux urgences pendant une canicule surviennent souvent après un délai de plusieurs jours — la vigilance doit rester haute même quand le premier pic semble passé.",
+    "Un relais de fin de service détaillé, même sous la fatigue, protège l'équipe suivante autant que les patients."
+  ]
+};
+
+/* =========================================================
+   DONNÉES DES 5 SIMULATIONS
+   ========================================================= */
+const CHARACTERS = {
+  amina: {
+    name: "Amina, 78 ans",
+    tag: "Paris, appartement sous les toits — seule, sans climatisation",
+    colors: { bg:"#241712", panel:"#3a2419", accent:"#E8622B", accent2:"#C9A07A", cbg:"#3a2419", cink:"#F0EBE0" },
+    acts: [
+      { title:"Réveil — la nuit n'a rien rendu", time:"6h00",
+        narration:"Le thermomètre du salon affiche déjà 27°C. Amina n'a pas fermé l'œil : la chaleur montée dans les murs pendant la journée n'est jamais redescendue.",
+        fact:"En France, la canicule de 2003 avait fait environ 15 000 morts — un choc qui a donné naissance au plan canicule aujourd'hui en vigueur. À Paris, la nuit du 24 au 25 juin 2026, le thermomètre n'est jamais descendu sous 27,9°C — une température minimale nocturne jamais observée jusque-là.",
+        sources:[S.owid, S.infoclimat],
+        choices: [
+          { label:"Ouvrir les volets pour aérer un peu", risk:5, consequence:"L'air extérieur est déjà à 26°C : ça n'apporte aucune fraîcheur, mais elle se sent moins enfermée." },
+          { label:"Rester allongée, trop fatiguée pour bouger", risk:15, consequence:"Elle reste au lit sans boire ; la chaleur continue de s'accumuler dans le corps sans qu'elle ne s'en rende bien compte." }
+        ]},
+      { title:"La matinée — un appel de contrôle", time:"10h30",
+        narration:"La résidence n'a pas de climatisation collective. Le service d'aide à domicile appelle pour un point de vigilance canicule.",
+        fact:"La plupart des décès liés à la chaleur ne sont pas des « coups de chaleur » spectaculaires, mais des maladies cardiovasculaires ou rénales aggravées par la température.",
+        sources:[S.owid],
+        choices: [
+          { label:"Accepter la visite, se faire aider à s'hydrater", risk:-10, consequence:"Quelqu'un vérifie son état, apporte de l'eau fraîche et quelques glaçons. Un vrai soulagement." },
+          { label:"Dire que « ça va, pas besoin », par pudeur", risk:20, consequence:"Elle ne veut déranger personne. Toute la journée, personne ne remarquera qu'elle boit à peine." }
+        ]},
+      { title:"Le pic de chaleur", time:"14h00",
+        narration:"Le carrelage du salon plein sud est chaud sous les pieds nus. C'est l'heure la plus rude de la journée.",
+        fact:"Le plan canicule recommande de désigner une « pièce fraîche » dans le logement et de fermer volets et rideaux côté soleil aux heures les plus chaudes.",
+        sources:[S.vigilance],
+        choices: [
+          { label:"Se réfugier dans la seule pièce orientée nord, volets fermés", risk:-5, consequence:"Un vrai geste simple : la pièce reste supportable jusqu'en fin d'après-midi." },
+          { label:"Rester dans le salon comme d'habitude, par habitude", risk:15, consequence:"La chaleur continue de s'accumuler dans le corps, heure après heure." }
+        ]},
+      { title:"La nuit qui ne rafraîchit pas", time:"22h00",
+        narration:"La température extérieure ne descend pas sous 24°C. Amina se sent nauséeuse, un peu confuse.",
+        fact:"Confusion, nausées, absence de sueur malgré la chaleur : ce sont des signes d'alerte qui justifient un appel immédiat au 15. Le 24 juin 2026, la station météo de Paris 5e (Tour Zamansky, Jussieu) a enregistré 40,3°C, le maximum relevé sur Paris pendant tout l'épisode. Le 26 juin, Le Monde titrait sur des hôpitaux français « au point de bascule » après sept jours de canicule.",
+        sources:[S.vigilance, S.infoclimat, S.lemondeBascule],
+        choices: [
+          { label:"Appeler sa fille, ou directement le 15", risk:-10, consequence:"Une prise en charge précoce. Le risque reste contenu." },
+          { label:"Se dire que « ça va passer » et se coucher", risk:25, consequence:"Personne ne surveille son état pendant la nuit la plus dure de l'épisode." }
+        ]}
+    ],
+    epilogues:[
+      "Bien accompagnée, elle passe l'épisode sans incident grave.",
+      "Fatiguée et un peu déshydratée, mais repérée à temps.",
+      "Des signes de coup de chaleur repérés tardivement : hospitalisation.",
+      "Le seuil est franchi : personne n'a réagi à temps. C'est le profil de la surmortalité observée en 2003."
+    ]
+  },
+
+  julien: {
+    name: "Julien, 42 ans",
+    tag: "Exploitation agricole, Bretagne intérieure",
+    colors: { bg:"#231f14", panel:"#3a3320", accent:"#B08D57", accent2:"#7A7554", cbg:"#3a3320", cink:"#F0EBE0" },
+    acts: [
+      { title:"Réveil — avant que le soleil ne tape", time:"5h30",
+        narration:"Julien fait le tour de l'exploitation avant la grosse chaleur : bêtes, cultures, quota d'eau du jour.",
+        fact:"Pendant cette canicule, plusieurs centaines de milliers de volailles sont mortes étouffées par la chaleur en France, saturant les services d'équarrissage.",
+        sources:[S.figaroVolailles],
+        choices: [
+          { label:"Priorité aux bêtes : eau, ombre, ventilation", risk:5, consequence:"Le bétail est correctement abreuvé, mais d'autres tâches prennent du retard." },
+          { label:"Lancer l'irrigation tout de suite pour sauver les cultures fragiles", risk:15, consequence:"Une grosse partie du quota d'eau du jour est consommée dès le matin." }
+        ]},
+      { title:"Alerte sécheresse renforcée", time:"12h00",
+        narration:"Une restriction d'arrosage et d'irrigation agricole étendue tombe en milieu de journée.",
+        fact:"Un hiver pluvieux, même record, ne protège pas un territoire d'une tension sur l'eau après plusieurs semaines de canicule : à Pontivy (Morbihan), sept usines — dont les sites Brets/Altho, stoppés trois jours — ont vu leur consommation d'eau restreinte pour préserver la ressource destinée à la population et à l'hôpital.",
+        sources:[S.linkedinSinglande, S.telegrammePontivy],
+        choices: [
+          { label:"Réduire l'irrigation de moitié, respecter le quota", risk:-5, consequence:"Une partie de la récolte souffrira, mais la ressource est préservée pour tout le village." },
+          { label:"Continuer à irriguer comme prévu, quota ou pas", risk:20, consequence:"Tension avec la mairie et les voisins qui dépendent de la même ressource en eau potable." }
+        ]},
+      { title:"Un départ de feu signalé", time:"14h00",
+        narration:"38°C à l'ombre. Un départ de feu est signalé à quelques kilomètres de l'exploitation.",
+        fact:"La chaleur prolongée assèche les sols et la végétation ; les massifs forestiers et les zones rurales sont particulièrement surveillés dès la vigilance orange.",
+        sources:[S.vigilance],
+        choices: [
+          { label:"Débroussailler et sécuriser les abords par précaution", risk:-10, consequence:"Du temps perdu, mais l'exploitation est protégée si le vent tourne." },
+          { label:"Continuer les travaux prévus, le feu est « loin »", risk:15, consequence:"Rien n'est sécurisé si la situation évolue vite." }
+        ]},
+      { title:"La nuit — même les bêtes ne récupèrent pas", time:"21h00",
+        narration:"La nuit n'apporte presque aucun répit. Le bétail lui-même peine à récupérer de la journée.",
+        fact:"Certains éleveurs bretons ont perdu plusieurs milliers d'animaux en une seule matinée cette année — un niveau de pertes jamais vu selon plusieurs témoignages recueillis pendant l'épisode. Exemple documenté : un élevage de 80 000 volailles a perdu 18 000 têtes en une journée, soit 22,5 % du cheptel — environ 85 000 € de pertes, malgré une autorisation préfectorale d'enfouissement d'urgence obtenue le jour même.",
+        sources:[S.telegramme, S.figaroVolailles],
+        choices: [
+          { label:"Vérifier une dernière fois l'abreuvement avant de dormir", risk:-5, consequence:"Le bétail est en sécurité pour la nuit." },
+          { label:"Aller se coucher, épuisé, sans dernier contrôle", risk:15, consequence:"Il découvrira peut-être des pertes au matin, comme d'autres éleveurs de la région." }
+        ]}
+    ],
+    epilogues:[
+      "L'exploitation limite ses pertes malgré la sécheresse.",
+      "Des pertes sur les cultures, mais l'exploitation encaisse le coup.",
+      "Pertes agricoles et animales lourdes, comme de nombreux éleveurs cette année.",
+      "Pertes économiques majeures, ressource en eau épuisée, risque d'incendie mal maîtrisé."
+    ]
+  },
+
+  sophie: {
+    name: "Sophie, 51 ans",
+    tag: "Pavillon climatisé, quartier résidentiel aisé",
+    colors: { bg:"#12202a", panel:"#1f3540", accent:"#4A9CC9", accent2:"#8B96A0", cbg:"#1f3540", cink:"#EAF2F5" },
+    acts: [
+      { title:"Réveil — 22°C grâce à la clim", time:"7h00",
+        narration:"Chez Sophie, il fait 22°C : la climatisation tourne depuis la veille. Une alerte RTE invite à limiter sa consommation électrique aux heures de pointe.",
+        fact:"Les centrales nucléaires en bord de rivière ou de mer sont soumises à des seuils de température de rejet, imposés depuis les canicules de 2003 et 2006 : au-delà, la puissance des réacteurs doit être réduite. Certains sites côtiers ont même dû, par le passé, réduire leur activité après une invasion de méduses obstruant les prises d'eau de refroidissement. Le 22 juin 2026, 6,38 GW de puissance nucléaire étaient indisponibles à cause de la chaleur — un record absolu ; EDF anticipait 8,4 GW la nuit suivante. Golfech, Bugey 2 et 3, Nogent-sur-Seine étaient à l'arrêt, Saint-Alban maintenu au minimum technique.",
+        sources:[S.franceinfoNuc, S.wikiEauNuc, S.linkedinLaconde],
+        choices: [
+          { label:"Couper la clim quelques heures par solidarité réseau", risk:-5, consequence:"Un léger inconfort, mais elle participe à l'effort collectif au bon moment." },
+          { label:"Laisser tourner la clim à fond, elle privilégie son confort", risk:10, consequence:"Un choix légitime, qui pèse cependant sur la pointe de consommation. Au-delà du réseau électrique, l'air chaud rejeté par les groupes de climatisation contribue aussi, à petite échelle, à réchauffer l'air extérieur — un des mécanismes de l'îlot de chaleur urbain." }
+        ]},
+      { title:"Sortir faire quelques courses", time:"11h00",
+        narration:"Sophie doit sortir en fin de matinée pour un petit trajet. Quel que soit le choix, mieux vaut privilégier des vêtements clairs et garder une gourde d'eau à disposition.",
+        fact:"Perifem, l'association qui fédère les acteurs techniques de la distribution, recommande aux magasins de maintenir une température intérieure sous les 26°C pour la chaîne du froid, et travaille sur des espaces rafraîchis accessibles à la clientèle en période de vigilance rouge.",
+        sources:[S.lsaPerifem],
+        choices: [
+          { label:"Sortir à pied ou à vélo, sans précaution particulière", risk:10, consequence:"Même un petit trajet expose à une chaleur qu'on sous-estime facilement. Ce n'est pas la meilleure option à cette heure ; mieux vaut la réserver aux heures plus fraîches." },
+          { label:"Prendre la voiture climatisée pour ce trajet", risk:0, consequence:"La climatisation de la voiture ne pèse pas directement sur le réseau électrique domestique. Un bémol : si le véhicule est resté en plein soleil, l'habitacle peut lui-même s'être transformé en étuve avant le départ." },
+          { label:"Prendre le bus ou le tram climatisé", risk:0, consequence:"Une option raisonnable, à condition que le réseau de transport en commun tienne lui aussi la cadence pendant l'épisode — ce qui n'est pas toujours garanti sur les lignes les plus anciennes." }
+        ]},
+      { title:"Télétravail — risque de coupure", time:"14h00",
+        narration:"Bureau climatisé, télétravail. Les prévisions RTE de l'après-midi n'excluent pas une coupure tournante.",
+        fact:"Un carreau de fenêtre en plein soleil, associé au sol qu'il chauffe par rayonnement, peut transmettre de l'ordre de 200 W par mètre carré à l'intérieur d'une pièce non protégée — jusqu'à l'équivalent d'un petit radiateur électrique sur une grande baie vitrée exposée plusieurs heures.",
+        sources:[S.volets],
+        choices: [
+          { label:"Anticiper : charger les appareils, préparer de l'eau", risk:-5, consequence:"Bien préparée si une coupure survient réellement." },
+          { label:"Ne rien anticiper, « ça n'arrivera pas ici »", risk:15, consequence:"En cas de coupure, la maison aux grandes baies vitrées accumule vite la chaleur sans aucune clim." }
+        ]},
+      { title:"Nuit — consommation record", time:"23h00",
+        narration:"La climatisation tourne encore. Le compteur électrique affiche une consommation record pour un mois de juin.",
+        fact:"De nombreux bâtiments, y compris tertiaires, règlent désormais leur climatisation à 26°C plutôt qu'à 22°C, une norme généralisée depuis la crise énergétique, qui limite un peu le pic de consommation sans jamais l'annuler. À La Défense, l'usine de froid Idex — 14 km de réseau, environ 200 000 travailleurs desservis chaque jour — ne parvenait plus à reconstituer ses stocks de glace la nuit.",
+        sources:[S.capitalDefense, S.lacroixDefense],
+        choices: [
+          { label:"Couper la clim la nuit, ouvrir une fois l'air extérieur redescendu", risk:-5, consequence:"Un peu moins confortable, mais la pointe nocturne sur le réseau est allégée." },
+          { label:"Garder la clim au maximum toute la nuit", risk:10, consequence:"Un confort maximal, qui pèse sur un réseau déjà sollicité par la demande de la journée." }
+        ]}
+    ],
+    epilogues:[
+      "Sa consommation modérée allège un peu la pression sur le réseau électrique.",
+      "Confort préservé, mais elle a pesé sur la pointe de consommation au pire moment.",
+      "Une coupure la surprend dans une maison peu préparée à vivre sans climatisation.",
+      "Le système auquel elle avait délégué tout son confort — réseau, climatisation — a lâché au pire moment."
+    ]
+  },
+
+  karim: {
+    name: "Karim, 29 ans",
+    tag: "Ouvrier charpentier sur un chantier BTP — un trajet aller le matin, un trajet retour le soir",
+    colors: { bg:"#1e1b16", panel:"#33302a", accent:"#E8622B", accent2:"#B8B4AC", cbg:"#33302a", cink:"#F0EBE0" },
+    acts: [
+      { title:"Réveil — direction le chantier", time:"5h45",
+        narration:"Karim doit être sur le chantier avant que la chaleur ne devienne intenable.",
+        question:"Comment s'y rendre, et à quelles conditions ?",
+        fact:"Depuis le décret du 27 mai 2025, l'employeur doit adapter les horaires, mettre de l'eau fraîche à disposition et fournir des équipements de protection dès la vigilance orange ; dans le BTP, l'arrêt du chantier est possible aux heures de pointe thermique en vigilance rouge.",
+        sources:[S.codeTravail],
+        choices: [
+          { label:"Partir plus tôt de son propre chef pour gagner du répit", risk:5, consequence:"Un peu d'avance sur la chaleur, mais aucun aménagement officiel derrière." },
+          { label:"Demander formellement un aménagement d'horaires", risk:5, consequence:"La réponse dépend du responsable de chantier, sans garantie absolue." },
+          { label:"Prendre les transports en commun plutôt que la voiture", risk:5, consequence:"Une option plus fraîche si le réseau tient ses fréquences, mais pas toujours compatible avec un départ à l'aube sur un chantier excentré." }
+        ]},
+      { title:"Le pont fermé", time:"7h30",
+        narration:"En chemin, Karim découvre que le pont de Bénouville est fermé à toute circulation : la chaleur a dilaté sa structure métallique.",
+        question:"Comment continuer sa route ?",
+        fact:"Le choix a été fait de maintenir l'ouvrage en position levée plutôt que de risquer un frottement du tablier sur la chaussée, qui aurait pu endommager la structure elle-même. Les rails de chemin de fer classés en catégorie thermique T6 (les plus exposés) subissent le même effet cumulatif : ce n'est pas le pic d'un seul jour qui menace la structure, mais l'accumulation de plusieurs journées consécutives de forte chaleur.",
+        sources:[S.bfmBenouville, S.poincareRailsT6],
+        choices: [
+          { label:"Prendre la déviation plus longue, en connaissance de cause", risk:0, consequence:"Du retard à l'arrivée sur le chantier, mais aucun risque supplémentaire pris." },
+          { label:"Chercher un raccourci non prévu pour tenir l'horaire", risk:15, consequence:"Une tension avec le chef de chantier évitée à court terme, mais un risque pris sur un itinéraire non maîtrisé." }
+        ]},
+      { title:"Le pic de chaleur, sur le chantier", time:"14h00",
+        narration:"<span class=\"temp-tag\">38°C</span> en plein soleil. Pendant la pause, la radio du chantier annonce qu'un jeune charpentier est mort d'hyperthermie sur un chantier du BTP, quelques semaines plus tôt — malgré de bonnes dispositions de son employeur : eau fraîche à disposition, équipements de protection fournis.",
+        question:"Comment tenir jusqu'à la fin de la journée ?",
+        fact:"Un ouvrier de 19 ans est décédé d'une hyperthermie après un malaise sur un toit, dans la Drôme, alors que la température n'atteignait « que » 31°C à l'ombre : ses collègues faisaient des pauses, lui, avait refusé d'en prendre malgré plusieurs relances de ses collègues. Un rappel que les bonnes mesures ne suffisent pas si elles ne sont pas suivies au bon moment.",
+        sources:[S.epochCharpentier],
+        choices: [
+          { label:"Faire des pauses fréquentes à l'ombre, s'hydrater sans relâche", risk:-10, consequence:"La cadence baisse un peu, mais la fatigue reste gérable." },
+          { label:"Tenir la cadence habituelle pour ne pas prendre de retard", risk:20, consequence:"L'épuisement grandit sans qu'il ne s'en rende bien compte avant qu'il ne soit trop tard." }
+        ]},
+      { title:"Retour — un logement resté fermé toute la journée", time:"20h00",
+        narration:"Trajet du soir, retour chez lui.",
+        question:"Qu'a-t-il pris le temps de faire avant de partir ce matin ?",
+        fact:"Fermer tous les volets côté soleil avant de partir, puis brasser l'air avec un simple ventilateur au retour, reste l'un des gestes les plus efficaces et les moins coûteux pour limiter la chaleur accumulée dans un logement pendant la journée.",
+        sources:[S.volets],
+        choices: [
+          { label:"Il avait fermé tous les volets le matin ; il installe un ventilateur en rentrant", risk:-10, consequence:"La pièce principale est nettement plus vivable que si elle était restée exposée toute la journée." },
+          { label:"Les volets sont restés ouverts toute la journée, pas de ventilateur", risk:15, consequence:"La chaleur s'est accumulée sans discontinuer depuis le matin, et l'air ne circule pas." }
+        ]}
+    ],
+    epilogues:[
+      "Il tient le rythme de travail sans y laisser sa santé.",
+      "Épuisement en fin de journée : la récupération devient difficile.",
+      "Un épuisement lié à la chaleur en fin de journée entraîne un arrêt forcé.",
+      "Malaise sévère lié à la chaleur sur le lieu de travail."
+    ]
+  },
+
+  famille: {
+    id:"famille", name:"Nadia & Léo, 8 ans", tag:"Famille, quartier pavillonnaire modeste — duo parent/enfant",
+    colors: { bg:"#221d0f", panel:"#3a3220", accent:"#E8C468", accent2:"#7FA876", cbg:"#3a3220", cink:"#F5F0DC" },
+    acts: [
+      { title:"Réveil — envoyer Léo à l'école ?", time:"7h00",
+        narration:"Nadia doit décider : accueil aménagé le matin seulement à l'école de Léo, ou le garder à la maison par précaution.",
+        fact:"Sous vigilance rouge, les préfectures peuvent aller jusqu'à la fermeture ou l'aménagement des horaires scolaires — un dispositif que plusieurs grandes villes ont déjà formalisé dans leur plan canicule.",
+        sources:[S.parisCanicule],
+        choices: [
+          { label:"L'envoyer à l'école aménagée (cours le matin seulement)", risk:5, consequence:"Léo est encadré, mais Nadia doit s'organiser seule pour l'après-midi." },
+          { label:"Le garder à la maison malgré l'école ouverte", risk:0, consequence:"Léo est en sécurité, mais Nadia doit gérer télétravail et garde en même temps, toute la journée." }
+        ]},
+      { title:"À la récré (on joue Léo)", time:"10h00",
+        narration:"Le sport prévu en extérieur ce matin est maintenu à l'école aménagée. Certaines écoles anciennes, mal isolées, deviennent de véritables fournaises l'été : à l'école élémentaire Victor Hugo d'Angers, des parents ont par exemple posé eux-mêmes des couvertures de survie sur les vitres des classes les plus exposées, faute de mieux.",
+        fact:"Les enfants figurent parmi les publics prioritaires du dispositif de vigilance canicule : ils sont physiologiquement plus sensibles à la déshydratation et aux malaises que les adultes. Le cas de l'école d'Angers, où les parents ont posé eux-mêmes des couvertures de survie aux fenêtres, a été relayé par la presse régionale.",
+        sources:[S.vigilance, S.ouestFranceAngers],
+        choices: [
+          { label:"Rester à l'ombre à la récré, boire de l'eau souvent", risk:-5, consequence:"Léo tient bien jusqu'à midi, sans souci." },
+          { label:"Courir et jouer normalement comme les copains", risk:15, consequence:"Un peu de chaleur, de fatigue, un léger malaise en fin de matinée." }
+        ]},
+      { title:"L'après-midi, tout en même temps (on joue Nadia)", time:"14h00",
+        narration:"École fermée pour l'après-midi. Nadia doit continuer à travailler tout en s'occupant de Léo.",
+        fact:"Un plan national de 190 millions d'euros vise justement à financer, en urgence, l'adaptation des écoles les plus vulnérables : ombrières, brasseurs d'air, protections solaires, avec un objectif de baisse de 5 à 10°C dans les salles concernées.",
+        sources:[S.banquePostale],
+        choices: [
+          { label:"Télétravailler avec Léo dans la pièce la plus fraîche", risk:-5, consequence:"L'équilibre tient, malgré une légère tension avec l'employeur." },
+          { label:"Confier Léo en urgence à un proche pour rester disponible au travail", risk:5, consequence:"Une solution trouvée dans l'urgence, mais organisée à l'arrache et sous stress." }
+        ]},
+      { title:"La nuit — Léo dort mal", time:"22h00",
+        narration:"La chambre de Léo est encore à 29°C. Il dort mal, se réveille en pleurant, un peu chaud au front.",
+        fact:"Chez les jeunes enfants, une exposition prolongée à la chaleur sans surveillance peut aller jusqu'à un risque vital — ce qui justifie une vigilance accrue la nuit, quand les signes d'alerte sont plus faciles à manquer.",
+        sources:[S.vigilance],
+        choices: [
+          { label:"Le surveiller, lui donner à boire, appeler le 15 si ça s'aggrave", risk:-10, consequence:"Une bonne réactivité. Le risque reste contenu pour la nuit." },
+          { label:"Se dire que « c'est juste la chaleur, ça va passer »", risk:20, consequence:"Aucune surveillance active pendant la nuit la plus dure de l'épisode." }
+        ]}
+    ],
+    epilogues:[
+      "Léo traverse l'épisode sans malaise ; Nadia sans rupture professionnelle.",
+      "Un coup de chaud sans conséquence grave pour Léo ; Nadia est épuisée par l'équilibre travail/garde.",
+      "Léo est vu en urgence pour déshydratation ; la nuit a été mal surveillée.",
+      "Signes graves chez Léo faute de surveillance : une intervention d'urgence est nécessaire."
+    ]
+  },
+
+  marc: {
+    name: "Marc, 52 ans",
+    tag: "Opérateur de conduite, centrale nucléaire de Golfech — salle de contrôle",
+    colors: { bg:"#1a1f24", panel:"#26313a", accent:"#5B8FA8", accent2:"#9DB4BE", cbg:"#26313a", cink:"#EAF2F5" },
+    acts: [
+      { title:"Prise de poste — la Garonne trop chaude", time:"07h00",
+        narration:"Golfech est à l'arrêt depuis hier : la Garonne est trop chaude pour refroidir les réacteurs dans les limites autorisées. RTE appelle : le réseau a besoin de puissance disponible.",
+        fact:"Le 22 juin 2026, 6,38 GW de puissance nucléaire étaient indisponibles à cause de la chaleur — un record absolu. Golfech (Garonne), Bugey 2 et 3 (Rhône) et Nogent-sur-Seine étaient à l'arrêt ; Saint-Alban maintenu au minimum technique.",
+        sources:[S.linkedinLaconde, S.lopinionGolfech],
+        choices: [
+          { label:"Demander d'abord un point de situation complet sur la température de la Garonne", risk:-5, consequence:"Il prend deux minutes pour vérifier les données de rejet thermique avant de répondre à RTE. Rien ne presse au point de sauter cette étape." },
+          { label:"Répondre tout de suite « présent » à RTE, sans vérifier les chiffres du jour", risk:10, consequence:"Il se met à disposition immédiatement, mais sans avoir pris le temps de mesurer précisément l'ampleur de la dérogation demandée." }
+        ]},
+      { title:"La décision de redémarrage sous dérogation", time:"08h00",
+        narration:"RTE demande officiellement à EDF le maintien en fonctionnement « pour contraintes réseau ». La température de la Garonne dépasse la limite de dérogation climatique. Le chef d'équipe annonce le redémarrage partiel d'un réacteur, sous supervision de Marc.",
+        fact:"Cette pratique — demander le maintien au-delà des limites de température habituelles — s'est normalisée ces dernières années selon Thibault Laconde : « ce n'est pas une crise, c'est une dérive amenée à se répéter. »",
+        sources:[S.linkedinLaconde],
+        choices: [
+          { label:"Signaler par écrit ses réserves sur la température de la Garonne avant d'exécuter", risk:-5, consequence:"Ses réserves sont consignées et transmises. La manœuvre est quand même exécutée — mais l'information est tracée, pas seulement orale." },
+          { label:"Exécuter la procédure sans discussion — la décision revient à RTE et EDF, pas à lui", risk:10, consequence:"Le réacteur démarre en dérogation. Il surveille les indicateurs : la Garonne absorbe plus de chaleur qu'elle ne devrait, sans qu'aucune réserve n'ait été formalisée." }
+        ]},
+      { title:"Midi — situation nationale du réseau", time:"12h00",
+        narration:"Avant la relève de mi-journée, Marc doit résumer la situation à l'équipe suivante.",
+        fact:"Puissance nucléaire indisponible (chaleur) : 6,38 GW, record historique. Centrales impactées : Golfech, Bugey 2 et 3, Nogent-sur-Seine, Saint-Alban. Puissance anticipée indisponible la nuit suivante : 8,4 GW — un changement de dimension par rapport à 2003 ou 2019 (environ 6 GW). Selon Thibault Laconde : « Les centrales nucléaires ne sont pas les seules à souffrir : routes, usines, raffineries, datacenters, réseaux ferroviaires sont aussi dépassés. »",
+        sources:[S.linkedinLaconde],
+        choices: [
+          { label:"Transmettre un rapport détaillé avec les chiffres exacts de RTE", risk:-5, consequence:"L'équipe de nuit prend le relais avec une vision claire de la marge réelle du réseau." },
+          { label:"Résumer rapidement à l'oral, sans s'attarder sur les chiffres", risk:15, consequence:"L'équipe suivante démarre son poste sans toute l'information disponible sur la tension du réseau." }
+        ]},
+      { title:"Fin de poste — la question d'une jeune ingénieure", time:"16h00",
+        narration:"Une jeune ingénieure lui demande : « Est-ce que tu penses qu'on peut continuer à exploiter des centrales conçues pour un autre climat ? »",
+        fact:"Catherine Halbwachs (EDF) : « Le risque était identifié depuis février. Quand tout le monde se réjouissait du mois de février doux, chez EDF on préparait le plan grand chaud. » Les réacteurs français ont été conçus pour des températures d'eau de rivière inférieures de 4 à 6°C à celles de l'été 2026.",
+        sources:[S.linkedinPoincare, S.linkedinLaconde],
+        choices: [
+          { label:"« Non. Et personne n'a de réponse sérieuse à cette question pour l'instant. »", risk:-5, consequence:"Une réponse honnête, qui ne rassure personne — mais qui ne cache rien non plus." },
+          { label:"« On s'adapte au jour le jour — c'est notre métier »", risk:10, consequence:"Elle hoche la tête, pas convaincue. Lui non plus, au fond." }
+        ]}
+    ],
+    epilogues:[
+      "Marc a tracé chaque réserve et transmis une information complète : le réseau a tenu, sans que rien n'ait été minimisé en chemin.",
+      "Le service a tenu, mais certaines alertes sont restées informelles — l'information n'a pas toujours remonté clairement à l'équipe suivante.",
+      "Les dérogations se sont enchaînées sans qu'aucune réserve ne soit tracée par écrit : une pratique qui, répétée, finit par devenir la norme.",
+      "Aucune vigilance particulière n'a été formalisée ce jour-là. Le réseau a tenu de justesse — mais la marge de sécurité s'est réduite un peu plus, sans que personne ne le documente."
+    ]
+  },
+
+  camille: {
+    name: "Camille, 34 ans",
+    tag: "Infirmière aux urgences, hôpital des Hauts-de-France",
+    colors: { bg:"#241419", panel:"#3a2129", accent:"#C9506B", accent2:"#B8969E", cbg:"#3a2129", cink:"#F5EBEE" },
+    acts: [
+      { title:"Prise de poste — le service est déjà plein", time:"07h30",
+        narration:"Camille prend son service. La salle d'attente est déjà pleine, trois jours de canicule ont fait grimper les passages.",
+        fact:"Le 24 juin 2026, Le Monde titrait sur « une hausse modérée des passages aux urgences, mais une inquiétude montante » : dans plusieurs hôpitaux, les passages ont grimpé d'environ 18 % par rapport à une semaine normale.",
+        sources:[S.lemondeUrgences],
+        choices: [
+          { label:"Suivre strictement le protocole de tri, même si l'attente s'allonge", risk:-5, consequence:"Plus lent, mais chaque patient est correctement évalué avant prise en charge." },
+          { label:"Accélérer les prises en charge en sautant certaines étapes pour désengorger", risk:15, consequence:"La salle d'attente se vide plus vite, mais certaines évaluations sont expédiées." }
+        ]},
+      { title:"La panne informatique", time:"11h00",
+        narration:"Les écrans du service se figent. Le système informatique des urgences tombe en panne, en pleine affluence.",
+        fact:"La Voix du Nord, 25 juin 2026 : panne des serveurs informatiques aux urgences dans plusieurs hôpitaux du Nord — les services diffusent alors le message « avant de vous rendre aux urgences, appelez d'abord ».",
+        sources:[S.voixDuNordPanne],
+        choices: [
+          { label:"Basculer immédiatement sur les fiches papier prévues en procédure dégradée", risk:-5, consequence:"Plus lent à écrire, mais chaque dossier reste traçable malgré la panne." },
+          { label:"Continuer comme si de rien n'était, en attendant le retour du réseau", risk:15, consequence:"Plusieurs dossiers ne sont plus mis à jour correctement pendant la panne." }
+        ]},
+      { title:"Renfort ou pas — la question du plan blanc", time:"14h30",
+        narration:"La charge continue de monter. Un collègue propose de faire remonter l'alerte pour obtenir du renfort.",
+        fact:"France 3, 25 juin : l'hôpital de Dole (Jura) a déclenché son plan blanc, cumulant panne informatique et canicule — renfort de personnel dans chaque service. Ailleurs, au Dauphiné, on relevait jusqu'à 36°C dans une salle de maternité : « l'impossible défi de la canicule ».",
+        sources:[S.france3Dole, S.dauphineMaternite],
+        choices: [
+          { label:"Remonter l'alerte pour demander un renfort d'urgence", risk:-5, consequence:"La cadre de service obtient deux renforts en une heure. La charge redevient gérable." },
+          { label:"Continuer à absorber seule la charge, sans remonter l'alerte", risk:20, consequence:"Le service tient, mais chaque soignant encaisse seul une charge qui aurait dû être signalée." }
+        ]},
+      { title:"Fin de service — le relais du soir", time:"20h00",
+        narration:"Camille termine son service, épuisée par une journée d'affluence continue.",
+        fact:"Le 26 juin 2026, Le Monde titre : « Le point de basculement est franchi » — les premiers décès en lien avec la chaleur sont confirmés ce jour-là. Dans les services d'urgences, la tension ne redescend pas avec le coucher du soleil.",
+        sources:[S.lemondeBascule],
+        choices: [
+          { label:"Passer un relais complet et détaillé à l'équipe de nuit avant de partir", risk:-10, consequence:"L'équipe de nuit démarre avec une vision claire des dossiers en cours et des points de vigilance." },
+          { label:"Partir vite, épuisée, sans un vrai debrief", risk:15, consequence:"L'équipe de nuit découvre plusieurs situations sans le contexte nécessaire." }
+        ]}
+    ],
+    epilogues:[
+      "Camille tient la journée sans faille dans la prise en charge ; la fatigue est réelle, mais rien n'a été perdu en chemin.",
+      "La journée a tenu, au prix d'une fatigue et d'improvisations que personne n'a eu le temps de consigner.",
+      "Un dossier mal mis à jour pendant la panne informatique entraîne un incident de prise en charge, signalé après coup.",
+      "Le 26 juin, Le Monde titre « le point de basculement est franchi ». Camille l'a vécu de l'intérieur, dans un service en tension continue depuis trois jours."
+    ]
+  }
+};
+
+const ORDER = ["amina","julien","sophie","karim","famille","marc","camille"];
+
+/* Zones de vigilance — effets de seuil */
+const ZONES = [
+  { max: 10, label:"Vigilance jaune", color:"#E8C468" },
+  { max: 35, label:"Vigilance orange", color:"#E8622B" },
+  { max: 60, label:"Vigilance rouge", color:"#C9622B" },
+  { max: Infinity, label:"Seuil critique dépassé", color:"#8B1E1E" }
+];
+
+/* =========================================================
+   MOTEUR
+   ========================================================= */
+const state = { screen:"cover", charId:null, actIndex:0, risk:0, awaitingContinue:false, lastChoice:null, prevScreen:"cover" };
+
+function getZoneIndex(risk){ for(let i=0;i<ZONES.length;i++){ if(risk<=ZONES[i].max) return i; } return ZONES.length-1; }
+
+function setTheme(colors){
+  const r = document.documentElement.style;
+  r.setProperty('--bg', colors.bg); r.setProperty('--panel', colors.panel);
+  r.setProperty('--accent', colors.accent); r.setProperty('--accent2', colors.accent2);
+}
+function resetTheme(){
+  const r = document.documentElement.style;
+  r.setProperty('--bg', '#1b1815'); r.setProperty('--panel', '#2a2620');
+  r.setProperty('--accent', '#c9622b'); r.setProperty('--accent2', '#8b96a0');
+}
+
+function goCover(){ resetTheme(); state.screen="cover"; render(); }
+function goSelect(){ resetTheme(); state.screen="select"; render(); }
+function goSources(from){ state.prevScreen = from || state.screen; state.screen="sources"; render(); }
+function backFromSources(){ state.screen = state.prevScreen; render(); }
+
+function selectCharacter(id){
+  state.charId=id; state.actIndex=0; state.risk=0; state.awaitingContinue=false; state.lastChoice=null;
+  setTheme(CHARACTERS[id].colors); state.screen="game"; render();
+}
+function makeChoice(i){
+  const act = CHARACTERS[state.charId].acts[state.actIndex];
+  const choice = act.choices[i];
+  state.risk += choice.risk; state.lastChoice = choice; state.awaitingContinue = true; render();
+}
+function undoChoice(){
+  state.risk -= state.lastChoice.risk; state.lastChoice = null; state.awaitingContinue = false; render();
+}
+function nextAct(){
+  const acts = CHARACTERS[state.charId].acts;
+  if(state.actIndex < acts.length-1){ state.actIndex++; state.awaitingContinue=false; state.lastChoice=null; render(); }
+  else { state.screen="end"; render(); }
+}
+function replaySame(){ selectCharacter(state.charId); }
+
+/* =========================================================
+   RENDU
+   ========================================================= */
+function render(){
+  const stage = document.getElementById('stage');
+  if(state.screen==="cover") stage.innerHTML = renderCover();
+  else if(state.screen==="select") stage.innerHTML = renderSelect();
+  else if(state.screen==="game") stage.innerHTML = renderGame();
+  else if(state.screen==="end") stage.innerHTML = renderEnd();
+  else if(state.screen==="sources") stage.innerHTML = renderSources();
+  wireKarimFlipCard();
+}
+
+// Attache les événements de la carte à retourner en JS pur (addEventListener),
+// plus robuste que des attributs onclick en ligne pour du contenu injecté dynamiquement.
+function wireKarimFlipCard(){
+  const card = document.getElementById('flipcard');
+  if(!card) return;
+  card.addEventListener('click', function(){
+    if(card.dataset.side === 'front') toggleFlip();
+  });
+  card.addEventListener('keydown', function(e){
+    if((e.key === 'Enter' || e.key === ' ') && e.target === card && card.dataset.side === 'front'){
+      e.preventDefault();
+      toggleFlip();
+    }
+  });
+}
+
+function renderCover(){
+  return `
+  <div class="panel cover">
+    <p class="eyebrow">Devoir de mémoire — juin 2026</p>
+    <h1>LA CANICULE<br>EN 7 DESTINS</h1>
+    <p class="sub">Une nuit qui ne rafraîchit pas, un choix, une conséquence. Incarnez sept personnes très différentes pendant une journée de canicule — un senior isolé, un agriculteur, une famille, un salarié climatisé, un ouvrier du BTP, mais aussi un opérateur de centrale nucléaire et une infirmière aux urgences — et mesurez comment les mêmes degrés produisent des impacts inégaux, jusqu'au moment où un seuil est franchi.</p>
+    <div class="cover-actions">
+      <button class="btn" onclick="goSelect()">Choisir un personnage →</button>
+    </div>
+    <p style="margin-top:18px;"><span class="link-plain" onclick="goSources('cover')">Voir les sources utilisées →</span></p>
+  </div>
+  <footer class="credit">Contenu construit à partir de sources vérifiées (presse, retex professionnels, données de mortalité, réglementation). Un exercice de sensibilisation, pas une simulation médicale.</footer>
+  `;
+}
+
+function renderSelect(){
+  const cards = ORDER.map(id=>{
+    const c = CHARACTERS[id];
+    return `
+    <div class="card" style="--cbg:${c.colors.cbg}; --cink:${c.colors.cink}; border-color:${c.colors.accent}" onclick="selectCharacter('${id}')">
+      <div style="color:${c.colors.accent}">${ICONS[id]}</div>
+      <h3>${c.name}</h3>
+      <p class="tag">${c.tag}</p>
+      <span class="arrow">JOUER →</span>
+    </div>`;
+  }).join('');
+  return `
+  <div class="panel">
+    <p class="eyebrow">Étape 1 / 2</p>
+    <h2 class="headline" style="font-size:28px; margin:0 0 4px;">Qui incarnez-vous aujourd'hui ?</h2>
+    <p style="opacity:.8; font-size:14px; margin-bottom:18px;">Chaque personnage vit la même canicule sous un angle différent : âge, territoire, ressources, travail, famille.</p>
+    <div class="grid">${cards}</div>
+  </div>
+  <div style="text-align:center;"><button class="btn ghost" onclick="goCover()">← Retour</button></div>
+  `;
+}
+
+// Table des visuels utilisés par les cartes à retourner de Karim, par index d'acte
+const KARIM_FLIP_VISUALS = {
+  0: { img: KARIM_IMG2,     caption: "5h45 — avant que la chaleur ne devienne intenable",
+       alt: "Karim au petit-déjeuner à l'aube, téléphone en main, pensant déjà au chantier" },
+  1: { img: KARIM_IMG_ACT2, caption: "7h30 — pont de Bénouville, fermé à toute circulation",
+       alt: "Le pont de Bénouville relevé, chantier à l'arrêt, camion de Karim bloqué à la barrière" },
+  2: { img: KARIM_IMG_ACT3, caption: "14h00 — 38°C en plein soleil, sur le chantier",
+       alt: "Vue en plongée d'un chantier écrasé de soleil : un ouvrier assis à l'ombre, épuisé, à côté d'un article de journal annonçant la mort d'un jeune charpentier par hyperthermie ; un autre ouvrier continue de travailler en plein soleil" },
+  3: { img: KARIM_IMG_ACT4, caption: "20h00 — le logement retrouvé ce soir dépend d'un geste fait ce matin",
+       alt: "Bande dessinée en quatre cases : en haut, la même chambre avec volets fermés (fraîche, bleutée) ou ouverts (embrasée par le soleil) ; en bas, la pièce la nuit, apaisée à la lumière d'une lampe d'un côté, tandis que Karim rentre épuisé dans une pièce encore brûlante de l'autre, ventilateur en renfort",
+       fit: "contain" },
+};
+
+function karimFrontFaceHTML(actIndex){
+  const v = KARIM_FLIP_VISUALS[actIndex];
+  const fitStyle = v.fit === "contain" ? ` style="object-fit:contain; background:#0a0a0a;"` : "";
+  return `
+    <img class="hero-photo" src="${v.img}" alt="${v.alt}"${fitStyle}>
+    <div class="hero-caption">${v.caption}</div>
+    <span class="flip-hint">↻ Retourner la carte</span>
+  `;
+}
+function buildKarimBackFace(face, act){
+  face.innerHTML = `<div class="face-content">
+    <div class="flip-back-inner">
+      <p class="flip-eyebrow">La question du jour</p>
+      <p class="flip-question">${act.question}</p>
+      <div class="flip-choices" id="flipChoicesContainer"></div>
+    </div>
+  </div>`;
+  // Boutons construits en DOM pur + addEventListener : plus robuste que
+  // le HTML string + onclick inline, qui peut se comporter différemment
+  // selon navigateurs/réglages une fois injecté dynamiquement.
+  const container = face.querySelector('#flipChoicesContainer');
+  act.choices.forEach((ch, i) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'flip-choice-btn';
+    btn.innerHTML = `<span class="bullet">${String.fromCharCode(65+i)}</span><span>${ch.label}</span>`;
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      makeChoice(i);
+    });
+    container.appendChild(btn);
+  });
+}
+
+function illustrationSlot(act){
+  // Actes 1 et 2 de Karim : carte à retourner — recto = photo, verso = question + choix (fond noir)
+  if(state.charId==='karim' && KARIM_FLIP_VISUALS.hasOwnProperty(state.actIndex)){
+    if(state.awaitingContinue){
+      // Choix déjà fait : on montre juste la photo, plus de flip ni de choix ici
+      return `<div class="flip-card static"><div class="flip-card-face flip-front-face">
+        <div class="face-content">${karimFrontFaceHTML(state.actIndex)}</div>
+      </div></div>`;
+    }
+    return `
+      <div class="flip-card" id="flipcard" data-side="front" role="button" tabindex="0" aria-label="Retourner la carte pour voir la question">
+        <div class="flip-card-face flip-front-face" id="flipcardface">
+          <div class="face-content">${karimFrontFaceHTML(state.actIndex)}</div>
+        </div>
+      </div>`;
+  }
+  const c = CHARACTERS[state.charId];
+  return `<div class="illustration" style="color:${c.colors.accent}">${ILLUS[state.charId][state.actIndex]}</div>`;
+}
+
+
+// Effet 2D pur (zoom + fondu) — volontairement SANS aucune propriété 3D
+// (perspective / backface-visibility / rotateY), qui peuvent casser la
+// détection de clic sur certains navigateurs même quand tout s'affiche
+// correctement. Ceci garantit que les boutons restent toujours cliquables.
+function toggleFlip(){
+  const card = document.getElementById('flipcard');
+  const face = document.getElementById('flipcardface');
+  if(!card || !face) return;
+  const act = CHARACTERS[state.charId].acts[state.actIndex];
+  const showingBack = card.dataset.side === 'back';
+
+  face.style.transition = 'transform .18s ease-in, opacity .18s ease-in';
+  face.style.transform = 'scale(.88)';
+  face.style.opacity = '0';
+
+  setTimeout(()=>{
+    if(showingBack){
+      face.className = 'flip-card-face flip-front-face';
+      face.innerHTML = `<div class="face-content">${karimFrontFaceHTML(state.actIndex)}</div>`;
+      card.dataset.side = 'front';
+    } else {
+      face.className = 'flip-card-face flip-back-face';
+      buildKarimBackFace(face, act);
+      card.dataset.side = 'back';
+    }
+    face.style.transition = 'transform .35s cubic-bezier(.34,1.56,.64,1), opacity .3s ease-out';
+    face.style.transform = 'scale(1)';
+    face.style.opacity = '1';
+  }, 180);
+}
+
+// "Retour d'expérience" : le fait s'appuie sur un événement réel et daté, rapporté par la
+// presse ou un témoignage (une histoire vécue). "Situation terrain" : le fait est plus général
+// — statistique, réglementaire ou explicatif — sans incident précis à l'origine.
+const RETOUR_EXPERIENCE_SOURCES = new Set([
+  S.figaroVolailles, S.linkedinSinglande, S.telegramme, S.bfmBenouville, S.epochCharpentier, S.ouestFranceAngers
+]);
+function factLabel(act){
+  const srcs = act.sources || [];
+  const isRetourExperience = srcs.some(s => RETOUR_EXPERIENCE_SOURCES.has(s));
+  return isRetourExperience ? "Retour d'expérience" : "Situation terrain";
+}
+
+function renderGame(){
+  const c = CHARACTERS[state.charId];
+  const act = c.acts[state.actIndex];
+  const zoneIdx = getZoneIndex(state.risk);
+  const zone = ZONES[zoneIdx];
+  const fillPct = Math.max(0, Math.min(100, (state.risk / 80) * 100));
+
+  const isKarimFlipAct = (state.charId==='karim' && KARIM_FLIP_VISUALS.hasOwnProperty(state.actIndex));
+
+  let body;
+  if(!state.awaitingContinue){
+    if(isKarimFlipAct){
+      // Tout est porté par la carte : photo au recto, question + choix au verso. Rien en dessous.
+      body = `${illustrationSlot(act)}`;
+    } else {
+      const choiceButtons = act.choices.map((ch,i)=>`
+        <button class="choice-btn" onclick="makeChoice(${i})">
+          <span class="bullet">${String.fromCharCode(65+i)}</span>
+          <span>${ch.label}</span>
+        </button>`).join('');
+      body = `
+        ${illustrationSlot(act)}
+        <div class="narration">${act.narration}</div>
+        <div class="choices">${choiceButtons}</div>
+      `;
+    }
+  } else {
+    const sourceLinks = (act.sources||[]).map(s=> s.url
+      ? `<a href="${s.url}" target="_blank" rel="noopener">↗ ${s.label}</a>`
+      : `<span>${s.label}${s.date ? ' — ' + s.date : ''}</span>`
+    ).join('');
+    body = `
+      ${illustrationSlot(act)}
+      <div class="narration">${act.narration}</div>
+      <div class="consequence-box">${state.lastChoice.consequence}</div>
+      <div class="fact-card">
+        <span class="flabel">${factLabel(act)}</span>${act.fact}
+        <span class="fsource">${sourceLinks}</span>
+      </div>
+      <div class="continue-row">
+        <button class="btn ghost small" onclick="undoChoice()">← Revenir sur mon choix</button>
+        <button class="btn" onclick="nextAct()">${state.actIndex < c.acts.length-1 ? "Acte suivant →" : "Voir l'épilogue →"}</button>
+      </div>
+    `;
+  }
+
+  return `
+  <div class="panel">
+    <div class="topbar">
+      <div class="who">
+        <span style="color:${c.colors.accent}">${ICONS[state.charId]}</span>
+        <div><div class="name">${c.name}</div><div class="tag">${c.tag}</div></div>
+      </div>
+      <div class="gauge">
+        <span class="gauge-label">${zone.label}</span>
+        <div class="gauge-track" style="--zone-color:${zone.color}">
+          <div class="gauge-fill" style="width:${fillPct}%; background:${zone.color}"></div>
+          <div class="gauge-ticks"><span></span><span></span><span></span><span></span></div>
+        </div>
+      </div>
+    </div>
+    <div class="act-eyebrow"><p class="eyebrow">Acte ${state.actIndex+1} / ${c.acts.length} — ${act.time}</p></div>
+    <h2 class="act-title">${act.title}</h2>
+    ${body}
+  </div>
+  `;
+}
+
+function renderEnd(){
+  const c = CHARACTERS[state.charId];
+  const zoneIdx = getZoneIndex(state.risk);
+  const zone = ZONES[zoneIdx];
+  const epilogue = c.epilogues[zoneIdx];
+
+  return `
+  <div class="zone-banner" style="--zone-color:${zone.color}; background:${zone.color};">
+    <p class="eyebrow" style="color:var(--ink); opacity:.7;">Fin de journée — ${c.name}</p>
+    <h2>${zone.label}</h2>
+  </div>
+  <div class="panel">
+    <p class="epilogue-text"><b>${epilogue}</b></p>
+    <div class="tips-card">
+      <span class="flabel">Conseils clés de la journée</span>
+      <ul class="tips-list">
+        ${(KEY_TIPS[state.charId]||[]).map(tip=>`<li>${tip}</li>`).join('')}
+      </ul>
+    </div>
+    <div class="threshold-note">
+      <b>Sur les effets de seuil :</b> les quatre zones ci-dessus ne sont pas un simple dégradé. Au-delà d'un certain niveau accumulé — dans le corps, dans une exploitation, dans un réseau électrique ou dans une infrastructure — l'impact change de nature : il ne s'additionne plus, il bascule. C'est ce basculement, plus que la température en valeur absolue, qui a caractérisé cette canicule.
+    </div>
+    <div class="tips-card">
+      <span class="flabel">Et vous, que feriez-vous ? — méthode des 4F</span>
+      <ul class="tips-list">
+        <li><b>Facts</b> — Quels choix avez-vous faits, dans quel ordre, avec quelle information disponible sur le moment ?</li>
+        <li><b>Feelings</b> — Qu'avez-vous ressenti à l'instant du choix : urgence, doute, gêne de déranger, pression du groupe ou de la hiérarchie ?</li>
+        <li><b>Findings</b> — Quel enseignement retenez-vous de l'écart entre votre décision et la « case réalité » qui a suivi ?</li>
+        <li><b>Future</b> — La prochaine fois qu'une vigilance orange ou rouge sera annoncée, que changerez-vous concrètement, pour vous ou pour quelqu'un d'autre ?</li>
+      </ul>
+    </div>
+    <div class="end-actions">
+      <button class="btn" onclick="replaySame()">Rejouer ${c.name.split(',')[0]}</button>
+      <button class="btn ghost" onclick="goSelect()">Essayer un autre personnage →</button>
+      <button class="btn ghost small" onclick="goSources('end')">Voir les sources →</button>
+    </div>
+  </div>
+  <footer class="credit">Devoir de mémoire — pensé pour nourrir un vrai retour d'expérience (méthode des 4F : Facts, Feelings, Findings, Future).</footer>
+  `;
+}
+
+function renderSources(){
+  const items = Object.values(S).map(s=>`<li><b>${s.label}</b>${s.url
+      ? `<a href="${s.url}" target="_blank" rel="noopener">${s.url}</a>`
+      : `<span>${s.date || ''}</span>`
+    }</li>`).join('');
+  return `
+  <div class="panel">
+    <p class="eyebrow">Pour aller plus loin</p>
+    <h2 class="headline" style="font-size:26px; margin:0 0 12px;">Sources mobilisées</h2>
+    <p style="opacity:.8; font-size:13.5px; margin-bottom:16px;">Chaque « case réalité » du site s'appuie sur une source vérifiable, listée ci-dessous.</p>
+    <ul class="sources-list">${items}</ul>
+  </div>
+  <div style="text-align:center;"><button class="btn ghost" onclick="backFromSources()">← Retour</button></div>
+  `;
+}
+
+render();
+</script>
+</body>
+</html>
