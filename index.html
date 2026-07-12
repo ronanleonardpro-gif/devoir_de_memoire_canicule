@@ -304,15 +304,21 @@ const AMINA_FLIP_VISUALS = {
        alt: "Femme âgée dans son lit regardant les toits de Paris embrasés, téléphone à cadran sur la table de nuit" }
 };
 
-/* --------- Julien : 2 illustrations manga (cartes à retourner) --------- */
+/* --------- Julien : 4 illustrations manga (cartes à retourner) --------- */
 const JULIEN_IMG_ACT1 = "images/julien-acte1-betail.jpg";
 const JULIEN_IMG_ACT2 = "images/julien-acte2-agriculteur.jpg";
+const JULIEN_IMG_ACT3 = "images/julien-acte3-feu.jpg";
+const JULIEN_IMG_ACT4 = "images/julien-acte4-nuit.jpg";
 
 const JULIEN_FLIP_VISUALS = {
   0: { img: JULIEN_IMG_ACT1, caption: "5h30 — le bétail, avant que le soleil ne tape",
        alt: "Vaches entassées dans une étable surchauffée, un seau d'eau au premier plan" },
   1: { img: JULIEN_IMG_ACT2, caption: "12h00 — sol craquelé, maïs brûlé, pompe à sec",
-       alt: "Agriculteur face à un sol desséché, cultures de maïs brûlées, pompe d'irrigation hors d'eau" }
+       alt: "Agriculteur face à un sol desséché, cultures de maïs brûlées, pompe d'irrigation hors d'eau" },
+  2: { img: JULIEN_IMG_ACT3, caption: "14h00 — un départ de feu signalé à quelques kilomètres",
+       alt: "Julien de dos face à un incendie qui embrase un champ voisin, un corbeau survolant la scène, épis de céréales au premier plan" },
+  3: { img: JULIEN_IMG_ACT4, caption: "21h00 — le bétail épuisé, la nuit n'apporte aucun répit",
+       alt: "Troupeau de vaches allongées et épuisées dans l'étable au crépuscule, éleveur silhouette à la fenêtre au fond" }
 };
 
 /* =========================================================
@@ -475,6 +481,7 @@ const CHARACTERS = {
           { label:"Continuer à irriguer comme prévu, quota ou pas", risk:20, consequence:"Tension avec la mairie et les voisins qui dépendent de la même ressource en eau potable." }
         ]},
       { title:"Un départ de feu signalé", time:"14h00",
+        question:"Que faites-vous face à ce départ de feu à quelques kilomètres ?",
         narration:"38°C à l'ombre. Un départ de feu est signalé à quelques kilomètres de l'exploitation.",
         fact:"La chaleur prolongée assèche les sols et la végétation ; les massifs forestiers et les zones rurales sont particulièrement surveillés dès la vigilance orange.",
         sources:[S.vigilance],
@@ -483,6 +490,7 @@ const CHARACTERS = {
           { label:"Continuer les travaux prévus, le feu est « loin »", risk:15, consequence:"Rien n'est sécurisé si la situation évolue vite." }
         ]},
       { title:"La nuit — même les bêtes ne récupèrent pas", time:"21h00",
+        question:"Faites-vous un dernier contrôle avant de dormir ?",
         narration:"La nuit n'apporte presque aucun répit. Le bétail lui-même peine à récupérer de la journée.",
         fact:"Certains éleveurs bretons ont perdu plusieurs milliers d'animaux en une seule matinée cette année — un niveau de pertes jamais vu selon plusieurs témoignages recueillis pendant l'épisode. Exemple documenté : un élevage de 80 000 volailles a perdu 18 000 têtes en une journée, soit 22,5 % du cheptel — environ 85 000 € de pertes, malgré une autorisation préfectorale d'enfouissement d'urgence obtenue le jour même.",
         sources:[S.telegramme, S.figaroVolailles],
