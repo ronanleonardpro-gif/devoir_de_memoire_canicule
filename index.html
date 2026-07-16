@@ -185,17 +185,6 @@
     letter-spacing:.08em; text-transform:uppercase;
   }
   @media (max-width:560px){ .photo-band-img{ height:180px; } }
-
-  /* Photos pleine largeur pour Famille (Nadia & Léo) — positionnement normal, pas flip card */
-  .famille-photo-slot{ margin-bottom:16px; }
-  .famille-photo-slot .famille-img{
-    width:100%; max-width:520px; display:block; margin:0 auto 6px;
-    border-radius:4px; border:3px solid var(--ink); object-fit:cover;
-  }
-  .famille-photo-slot .famille-caption{
-    text-align:center; font-family:'JetBrains Mono',monospace; font-size:11px;
-    opacity:.7; margin-bottom:4px; letter-spacing:.04em;
-  }
 </style>
 </head>
 <body>
@@ -355,7 +344,7 @@ const NADIA_LEO_IMG_ACT2 = "images/nadia-leo-acte2-recre-cour.jpg";
 const NADIA_LEO_IMG_ACT3 = "images/nadia-leo-acte3-teletravail.jpg";
 const NADIA_LEO_IMG_ACT4 = "images/nadia-leo-acte4-nuit-chambre.jpg";
 
-const NADIA_LEO_PHOTO_VISUALS = {
+const NADIA_LEO_FLIP_VISUALS = {
   0: { img: NADIA_LEO_IMG_ACT1, caption: "7h00 — Nadia et Léo marchent vers l'école sous un soleil déjà brûlant",
        alt: "Nadia et Léo vus de dos, marchant main dans la main vers l'école au bout d'une rue déserte baignée de soleil jaune intense" },
   1: { img: NADIA_LEO_IMG_ACT2, caption: "10h00 — la cour de récré écrasée de soleil, couvertures de survie aux fenêtres",
@@ -663,6 +652,7 @@ const CHARACTERS = {
     colors: { bg:"#221d0f", panel:"#3a3220", accent:"#E8C468", accent2:"#7FA876", cbg:"#3a3220", cink:"#F5F0DC" },
     acts: [
       { title:"Réveil — envoyer Léo à l'école ?", time:"7h00",
+        question:"Envoyez-vous Léo à l'école aujourd'hui ?",
         narration:"Nadia doit décider : accueil aménagé le matin seulement à l'école de Léo, ou le garder à la maison par précaution.",
         fact:"Sous vigilance rouge, les préfectures peuvent aller jusqu'à la fermeture ou l'aménagement des horaires scolaires — un dispositif que plusieurs grandes villes ont déjà formalisé dans leur plan canicule.",
         sources:[S.parisCanicule],
@@ -671,6 +661,7 @@ const CHARACTERS = {
           { label:"Le garder à la maison malgré l'école ouverte", risk:0, consequence:"Léo est en sécurité, mais Nadia doit gérer télétravail et garde en même temps, toute la journée." }
         ]},
       { title:"À la récré (on joue Léo)", time:"10h00",
+        question:"La récré en plein soleil : que fait Léo ?",
         narration:"Le sport prévu en extérieur ce matin est maintenu à l'école aménagée. Certaines écoles anciennes, mal isolées, deviennent de véritables fournaises l'été : à l'école élémentaire Victor Hugo d'Angers, des parents ont par exemple posé eux-mêmes des couvertures de survie sur les vitres des classes les plus exposées, faute de mieux.",
         fact:"Les enfants figurent parmi les publics prioritaires du dispositif de vigilance canicule : ils sont physiologiquement plus sensibles à la déshydratation et aux malaises que les adultes. Le cas de l'école d'Angers, où les parents ont posé eux-mêmes des couvertures de survie aux fenêtres, a été relayé par la presse régionale.",
         sources:[S.vigilance, S.ouestFranceAngers],
@@ -679,6 +670,7 @@ const CHARACTERS = {
           { label:"Courir et jouer normalement comme les copains", risk:15, consequence:"Un peu de chaleur, de fatigue, un léger malaise en fin de matinée." }
         ]},
       { title:"L'après-midi, tout en même temps (on joue Nadia)", time:"14h00",
+        question:"Comment Nadia gère-t-elle l'après-midi sans école ?",
         narration:"École fermée pour l'après-midi. Nadia doit continuer à travailler tout en s'occupant de Léo.",
         fact:"Un plan national de 190 millions d'euros vise justement à financer, en urgence, l'adaptation des écoles les plus vulnérables : ombrières, brasseurs d'air, protections solaires, avec un objectif de baisse de 5 à 10°C dans les salles concernées.",
         sources:[S.banquePostale],
@@ -687,6 +679,7 @@ const CHARACTERS = {
           { label:"Confier Léo en urgence à un proche pour rester disponible au travail", risk:5, consequence:"Une solution trouvée dans l'urgence, mais organisée à l'arrache et sous stress." }
         ]},
       { title:"La nuit — Léo dort mal", time:"22h00",
+        question:"Léo se réveille en pleurant, un peu chaud au front. Que faites-vous ?",
         narration:"La chambre de Léo est encore à 29°C. Il dort mal, se réveille en pleurant, un peu chaud au front.",
         fact:"Chez les jeunes enfants, une exposition prolongée à la chaleur sans surveillance peut aller jusqu'à un risque vital — ce qui justifie une vigilance accrue la nuit, quand les signes d'alerte sont plus faciles à manquer.",
         sources:[S.vigilance],
@@ -960,6 +953,14 @@ function sophieFrontFaceHTML(actIndex){
     <span class="flip-hint">↻ Retourner la carte</span>
   `;
 }
+function nadiaLeoFrontFaceHTML(actIndex){
+  const v = NADIA_LEO_FLIP_VISUALS[actIndex];
+  return `
+    <img class="hero-photo" src="${v.img}" alt="${v.alt}">
+    <div class="hero-caption">${v.caption}</div>
+    <span class="flip-hint">↻ Retourner la carte</span>
+  `;
+}
 // buildFlipBackFace : générique, utilisé pour Karim, Amina, Julien ET Sophie
 // (act.question est requis dans les données du personnage)
 function buildFlipBackFace(face, act){
@@ -1046,13 +1047,19 @@ function illustrationSlot(act){
         </div>
       </div>`;
   }
-  // ── Famille (Nadia & Léo) : photo simple, image au-dessus, texte en dessous ──
-  if(state.charId==='famille' && NADIA_LEO_PHOTO_VISUALS.hasOwnProperty(state.actIndex)){
-    const v = NADIA_LEO_PHOTO_VISUALS[state.actIndex];
-    return `<div class="famille-photo-slot">
-      <img class="famille-img" src="${v.img}" alt="${v.alt}">
-      <div class="famille-caption">${v.caption}</div>
-    </div>`;
+  // ── Nadia & Léo : carte à retourner (même mécanique que les autres) ──
+  if(state.charId==='famille' && NADIA_LEO_FLIP_VISUALS.hasOwnProperty(state.actIndex)){
+    if(state.awaitingContinue){
+      return `<div class="flip-card static"><div class="flip-card-face flip-front-face">
+        <div class="face-content">${nadiaLeoFrontFaceHTML(state.actIndex)}</div>
+      </div></div>`;
+    }
+    return `
+      <div class="flip-card" id="flipcard" data-side="front" role="button" tabindex="0" aria-label="Retourner la carte pour voir la question">
+        <div class="flip-card-face flip-front-face" id="flipcardface">
+          <div class="face-content">${nadiaLeoFrontFaceHTML(state.actIndex)}</div>
+        </div>
+      </div>`;
   }
   // ── Défaut : illustration SVG ──
   const c = CHARACTERS[state.charId];
@@ -1084,6 +1091,8 @@ function toggleFlip(){
         ? julienFrontFaceHTML(state.actIndex)
         : state.charId==='sophie'
         ? sophieFrontFaceHTML(state.actIndex)
+        : state.charId==='famille'
+        ? nadiaLeoFrontFaceHTML(state.actIndex)
         : karimFrontFaceHTML(state.actIndex);
       face.innerHTML = `<div class="face-content">${frontHTML}</div>`;
       card.dataset.side = 'front';
@@ -1117,12 +1126,13 @@ function renderGame(){
   const zone = ZONES[zoneIdx];
   const fillPct = Math.max(0, Math.min(100, (state.risk / 80) * 100));
 
-  // Amina, Karim, Julien et Sophie partagent le même système de carte à retourner
+  // Amina, Karim, Julien, Sophie et Nadia & Léo partagent le même système de carte à retourner
   const isFlipAct =
     (state.charId==='karim' && KARIM_FLIP_VISUALS.hasOwnProperty(state.actIndex)) ||
     (state.charId==='amina' && AMINA_FLIP_VISUALS.hasOwnProperty(state.actIndex)) ||
     (state.charId==='julien' && JULIEN_FLIP_VISUALS.hasOwnProperty(state.actIndex)) ||
-    (state.charId==='sophie' && SOPHIE_FLIP_VISUALS.hasOwnProperty(state.actIndex));
+    (state.charId==='sophie' && SOPHIE_FLIP_VISUALS.hasOwnProperty(state.actIndex)) ||
+    (state.charId==='famille' && NADIA_LEO_FLIP_VISUALS.hasOwnProperty(state.actIndex));
 
   let body;
   if(!state.awaitingContinue){
