@@ -350,19 +350,19 @@ const SOPHIE_FLIP_VISUALS = {
 };
 
 /* --------- Famille (Nadia & Léo) : 4 illustrations manga (photo + texte en dessous) --------- */
-const FAMILLE_IMG_ACT1 = "images/famille-acte1-ecole-matin.jpg";
-const FAMILLE_IMG_ACT2 = "images/famille-acte2-recre-cour.jpg";
-const FAMILLE_IMG_ACT3 = "images/famille-acte3-nadia-teletravail.jpg";
-const FAMILLE_IMG_ACT4 = "images/famille-acte4-nuit-chambre-leo.jpg";
+const NADIA_LEO_IMG_ACT1 = "images/nadia-leo-acte1-ecole-matin.jpg";
+const NADIA_LEO_IMG_ACT2 = "images/nadia-leo-acte2-recre-cour.jpg";
+const NADIA_LEO_IMG_ACT3 = "images/nadia-leo-acte3-teletravail.jpg";
+const NADIA_LEO_IMG_ACT4 = "images/nadia-leo-acte4-nuit-chambre.jpg";
 
-const FAMILLE_PHOTO_VISUALS = {
-  0: { img: FAMILLE_IMG_ACT1, caption: "7h00 — Nadia et Léo marchent vers l'école sous un soleil déjà brûlant",
+const NADIA_LEO_PHOTO_VISUALS = {
+  0: { img: NADIA_LEO_IMG_ACT1, caption: "7h00 — Nadia et Léo marchent vers l'école sous un soleil déjà brûlant",
        alt: "Nadia et Léo vus de dos, marchant main dans la main vers l'école au bout d'une rue déserte baignée de soleil jaune intense" },
-  1: { img: FAMILLE_IMG_ACT2, caption: "10h00 — la cour de récré écrasée de soleil, couvertures de survie aux fenêtres",
+  1: { img: NADIA_LEO_IMG_ACT2, caption: "10h00 — la cour de récré écrasée de soleil, couvertures de survie aux fenêtres",
        alt: "Cour d'école en plein soleil : des enfants courent tandis que d'autres se réfugient à l'ombre d'un arbre. Des couvertures de survie sont fixées aux fenêtres du bâtiment" },
-  2: { img: FAMILLE_IMG_ACT3, caption: "14h00 — école fermée, Nadia jongle entre Léo et le travail",
+  2: { img: NADIA_LEO_IMG_ACT3, caption: "14h00 — école fermée, Nadia jongle entre Léo et le travail",
        alt: "Nadia au téléphone devant son ordinateur, stressée, tandis que Léo joue au sol dans un salon encombré de jouets. Chaleur étouffante, ventilateur au plafond." },
-  3: { img: FAMILLE_IMG_ACT4, caption: "22h00 — 33°C dans la chambre de Léo, la nuit ne rafraîchit rien",
+  3: { img: NADIA_LEO_IMG_ACT4, caption: "22h00 — 33°C dans la chambre de Léo, la nuit ne rafraîchit rien",
        alt: "Vue depuis la porte de la chambre d'enfant : lit défait, thermomètre affichant 33°C, veilleuse allumée, fenêtre ouverte sur la nuit chaude" }
 };
 
@@ -659,7 +659,7 @@ const CHARACTERS = {
   },
 
   famille: {
-    id:"famille", name:"Nadia & Léo, 8 ans", tag:"Famille, quartier pavillonnaire modeste — duo parent/enfant",
+    id:"famille", name:"Nadia & Léo, 8 ans", tag:"Quartier pavillonnaire modeste — mère seule et son fils",
     colors: { bg:"#221d0f", panel:"#3a3220", accent:"#E8C468", accent2:"#7FA876", cbg:"#3a3220", cink:"#F5F0DC" },
     acts: [
       { title:"Réveil — envoyer Léo à l'école ?", time:"7h00",
@@ -1047,8 +1047,8 @@ function illustrationSlot(act){
       </div>`;
   }
   // ── Famille (Nadia & Léo) : photo simple, image au-dessus, texte en dessous ──
-  if(state.charId==='famille' && FAMILLE_PHOTO_VISUALS.hasOwnProperty(state.actIndex)){
-    const v = FAMILLE_PHOTO_VISUALS[state.actIndex];
+  if(state.charId==='famille' && NADIA_LEO_PHOTO_VISUALS.hasOwnProperty(state.actIndex)){
+    const v = NADIA_LEO_PHOTO_VISUALS[state.actIndex];
     return `<div class="famille-photo-slot">
       <img class="famille-img" src="${v.img}" alt="${v.alt}">
       <div class="famille-caption">${v.caption}</div>
