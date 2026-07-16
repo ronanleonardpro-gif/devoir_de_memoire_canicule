@@ -185,6 +185,17 @@
     letter-spacing:.08em; text-transform:uppercase;
   }
   @media (max-width:560px){ .photo-band-img{ height:180px; } }
+
+  /* Photos pleine largeur pour Famille (Nadia & Léo) — positionnement normal, pas flip card */
+  .famille-photo-slot{ margin-bottom:16px; }
+  .famille-photo-slot .famille-img{
+    width:100%; max-width:520px; display:block; margin:0 auto 6px;
+    border-radius:4px; border:3px solid var(--ink); object-fit:cover;
+  }
+  .famille-photo-slot .famille-caption{
+    text-align:center; font-family:'JetBrains Mono',monospace; font-size:11px;
+    opacity:.7; margin-bottom:4px; letter-spacing:.04em;
+  }
 </style>
 </head>
 <body>
@@ -338,6 +349,23 @@ const SOPHIE_FLIP_VISUALS = {
        alt: "Gros plan sur un compteur électrique digital aux chiffres qui défilent, maison encore allumée seule dans la nuit" }
 };
 
+/* --------- Famille (Nadia & Léo) : 4 illustrations manga (photo + texte en dessous) --------- */
+const FAMILLE_IMG_ACT1 = "images/famille-acte1-ecole-matin.jpg";
+const FAMILLE_IMG_ACT2 = "images/famille-acte2-recre-cour.jpg";
+const FAMILLE_IMG_ACT3 = "images/famille-acte3-nadia-teletravail.jpg";
+const FAMILLE_IMG_ACT4 = "images/famille-acte4-nuit-chambre-leo.jpg";
+
+const FAMILLE_PHOTO_VISUALS = {
+  0: { img: FAMILLE_IMG_ACT1, caption: "7h00 — Nadia et Léo marchent vers l'école sous un soleil déjà brûlant",
+       alt: "Nadia et Léo vus de dos, marchant main dans la main vers l'école au bout d'une rue déserte baignée de soleil jaune intense" },
+  1: { img: FAMILLE_IMG_ACT2, caption: "10h00 — la cour de récré écrasée de soleil, couvertures de survie aux fenêtres",
+       alt: "Cour d'école en plein soleil : des enfants courent tandis que d'autres se réfugient à l'ombre d'un arbre. Des couvertures de survie sont fixées aux fenêtres du bâtiment" },
+  2: { img: FAMILLE_IMG_ACT3, caption: "14h00 — école fermée, Nadia jongle entre Léo et le travail",
+       alt: "Nadia au téléphone devant son ordinateur, stressée, tandis que Léo joue au sol dans un salon encombré de jouets. Chaleur étouffante, ventilateur au plafond." },
+  3: { img: FAMILLE_IMG_ACT4, caption: "22h00 — 33°C dans la chambre de Léo, la nuit ne rafraîchit rien",
+       alt: "Vue depuis la porte de la chambre d'enfant : lit défait, thermomètre affichant 33°C, veilleuse allumée, fenêtre ouverte sur la nuit chaude" }
+};
+
 /* =========================================================
    SOURCES — bibliographie complète
    ========================================================= */
@@ -371,7 +399,9 @@ const S = {
   infoclimat: { label:"Infoclimat.fr — relevés des stations météo françaises, juin 2026", url:"https://www.infoclimat.fr" },
   lopinionGolfech: { label:"L'Opinion — Occitanie, centrale nucléaire à l'arrêt : EDF face au défi du climat", url:"https://lopinion.com/articles/actualite/34285_occitanie-centrale-nucleaire-a-larret-edf-face-au-defi-du-climat" },
   telegrammePontivy: { label:"Le Télégramme — « On n'a jamais vu ça » : Brets et six autres usines à l'arrêt pour préserver l'eau à Pontivy", url:"https://www.letelegramme.fr/economie/on-na-jamais-vu-ca-brets-et-six-autres-usines-mises-a-larret-afin-de-preserver-leau-pour-la-population-et-lhopital-de-pontivy-7071956.php" },
-  lacroixDefense: { label:"La Croix — canicule à La Défense, un système de climatisation à l'épreuve du chaud", url:"https://www.la-croix.com/planete/canicule-a-la-defense-un-systeme-de-climatisation-a-l-epreuve-du-chaud-20260625" }
+  lacroixDefense: { label:"La Croix — canicule à La Défense, un système de climatisation à l'épreuve du chaud", url:"https://www.la-croix.com/planete/canicule-a-la-defense-un-systeme-de-climatisation-a-l-epreuve-du-chaud-20260625" },
+  franceinfoFontainebleau: { label:"France Info — incendie en forêt de Fontainebleau, plus de 1 000 hectares brûlés, agriculteurs en renfort", url:"https://www.franceinfo.fr/replay-jt/france-2/20-heures/incendie-dans-la-foret-de-fontainebleau-plus-de-1-000-hectares-deja-brules_8106623.html" },
+  laFranceAgricoleFontainebleau: { label:"La France Agricole — des agriculteurs mobilisés contre le feu en forêt de Fontainebleau", url:"https://www.lafranceagricole.fr/secheresse/article/901193/des-agriculteurs-mobilises-contre-le-feu-en-foret-de-fontainebleau" }
 };
 
 // Conseils clés affichés en fin de parcours (épilogue), un par personnage.
@@ -386,6 +416,7 @@ const KEY_TIPS = {
   julien: [
     "Anticipez les besoins en eau du cheptel et des cultures avant que la sécheresse ne s'aggrave.",
     "Restez vigilant sur le risque de départ de feu dès la vigilance orange, surtout près des zones asséchées.",
+    `En cas d'incendie, les agriculteurs sont souvent les premiers renforts des pompiers : citerne, déchaumeur, connaissance du terrain. À Fontainebleau en juillet 2026, une cinquantaine d'entre eux ont lutté toute la nuit → <a href="${S.laFranceAgricoleFontainebleau.url}" target="_blank" rel="noopener">${S.laFranceAgricoleFontainebleau.label}</a>`,
     "Surveillez les bâtiments d'élevage la nuit : la chaleur accumulée pendant la journée ne redescend pas toujours après le coucher du soleil.",
     `Sur le long terme, réfléchissez à des essences, cultures et races plus adaptées à la chaleur : le ministère de l'Agriculture propose des recommandations par filière → <a href="${S.agriGouvVagueChaleur.url}" target="_blank" rel="noopener">${S.agriGouvVagueChaleur.label}</a>`
   ],
@@ -499,11 +530,12 @@ const CHARACTERS = {
         ]},
       { title:"Un départ de feu signalé", time:"14h00",
         question:"Que faites-vous face à ce départ de feu à quelques kilomètres ?",
-        narration:"38°C à l'ombre. Un départ de feu est signalé à quelques kilomètres de l'exploitation.",
-        fact:"La chaleur prolongée assèche les sols et la végétation ; les massifs forestiers et les zones rurales sont particulièrement surveillés dès la vigilance orange.",
-        sources:[S.vigilance],
+        narration:"38°C à l'ombre. Un départ de feu est signalé à quelques kilomètres de l'exploitation. La FDSEA lance un appel aux agriculteurs du secteur pour venir en renfort avec des citernes.",
+        fact:"La chaleur prolongée assèche les sols et la végétation ; les massifs forestiers et les zones rurales sont particulièrement surveillés dès la vigilance orange. En juillet 2026, lors de l'incendie historique de la forêt de Fontainebleau (plus de 1 000 hectares brûlés), une cinquantaine d'agriculteurs se sont mobilisés spontanément : cuves d'eau arrimées à l'arrière de leurs tracteurs, rotations entre bouches à incendie et camions de pompiers pour que ceux-ci puissent rester au plus près du feu. Certains ont lutté toute la nuit aux côtés des sapeurs-pompiers.",
+        sources:[S.vigilance, S.franceinfoFontainebleau, S.laFranceAgricoleFontainebleau],
         choices: [
           { label:"Débroussailler et sécuriser les abords par précaution", risk:-10, consequence:"Du temps perdu, mais l'exploitation est protégée si le vent tourne." },
+          { label:"Atteler la citerne au tracteur et aller aider les pompiers", risk:5, consequence:"Tu rejoins d'autres agriculteurs du secteur. Vos citernes font des rotations entre les bouches à incendie et les camions des pompiers, qui peuvent rester au plus près du feu. Un effort épuisant, risqué, mais décisif : sans ces renforts, les soldats du feu perdaient un temps précieux à ravitailler." },
           { label:"Continuer les travaux prévus, le feu est « loin »", risk:15, consequence:"Rien n'est sécurisé si la situation évolue vite." }
         ]},
       { title:"La nuit — même les bêtes ne récupèrent pas", time:"21h00",
@@ -1014,6 +1046,14 @@ function illustrationSlot(act){
         </div>
       </div>`;
   }
+  // ── Famille (Nadia & Léo) : photo simple, image au-dessus, texte en dessous ──
+  if(state.charId==='famille' && FAMILLE_PHOTO_VISUALS.hasOwnProperty(state.actIndex)){
+    const v = FAMILLE_PHOTO_VISUALS[state.actIndex];
+    return `<div class="famille-photo-slot">
+      <img class="famille-img" src="${v.img}" alt="${v.alt}">
+      <div class="famille-caption">${v.caption}</div>
+    </div>`;
+  }
   // ── Défaut : illustration SVG ──
   const c = CHARACTERS[state.charId];
   return `<div class="illustration" style="color:${c.colors.accent}">${ILLUS[state.charId][state.actIndex]}</div>`;
@@ -1062,7 +1102,7 @@ function toggleFlip(){
 // presse ou un témoignage (une histoire vécue). "Situation terrain" : le fait est plus général
 // — statistique, réglementaire ou explicatif — sans incident précis à l'origine.
 const RETOUR_EXPERIENCE_SOURCES = new Set([
-  S.figaroVolailles, S.linkedinSinglande, S.telegramme, S.bfmBenouville, S.epochCharpentier, S.ouestFranceAngers
+  S.figaroVolailles, S.linkedinSinglande, S.telegramme, S.bfmBenouville, S.epochCharpentier, S.ouestFranceAngers, S.franceinfoFontainebleau, S.laFranceAgricoleFontainebleau
 ]);
 function factLabel(act){
   const srcs = act.sources || [];
